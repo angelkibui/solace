@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
-/// A single selectable concern shown as a list card on the "What's on
-/// your mind today?" onboarding screen (icon + title + description).
 class ConcernOption {
   final String title;
   final String description;
@@ -10,15 +8,12 @@ class ConcernOption {
   const ConcernOption({required this.title, required this.description, required this.icon});
 }
 
-/// App-wide constants that don't belong to a single feature.
 class AppConstants {
   AppConstants._();
 
   static const String appName = 'Solace';
   static const String appTagline = 'Healing begins with a safe space. No names, no labels, just you.';
 
-  /// Mental health concerns shown during onboarding (Part C) and reused
-  /// for Home's "Take Assessment" quick action once Part E is built.
   static const List<ConcernOption> concerns = <ConcernOption>[
     ConcernOption(
       title: 'Work Stress',
@@ -67,14 +62,11 @@ class AppConstants {
     ),
   ];
 
-  /// Anonymous "presence" colors offered on the Welcome screen's avatar
-  /// picker — a stand-in identity color until Part M adds real profile
-  /// customization.
   static const List<Color> presenceColors = <Color>[
-    Color(0xFF3B7DD8), // blue
-    Color(0xFF8B95A1), // grey
-    Color(0xFF2B2F38), // charcoal
-    Color(0xFFE8B99A), // peach
-    Color(0xFF2FAE58), // green
+    Color(0xFF3B7DD8),
+    Color(0xFF8B95A1),
+    Color(0xFF2B2F38),
+    Color(0xFFE8B99A),
+    Color(0xFF2FAE58),
   ];
 }
