@@ -10,6 +10,12 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   OnboardingCubit(this._prefsService) : super(const OnboardingState());
 
+  /// Called by WelcomeScreen whenever the alias is generated or shuffled
+  /// (Part C5), so it's available to pre-fill Register (Part D10) later.
+  void setAlias(String alias) {
+    emit(state.copyWith(alias: alias));
+  }
+
   void toggleConcern(String concern) {
     final updated = Set<String>.from(state.selectedConcerns);
     if (updated.contains(concern)) {

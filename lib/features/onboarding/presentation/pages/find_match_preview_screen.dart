@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../../../../core/widgets/placeholder_screen.dart';
 import '../../../../core/widgets/solace_button.dart';
 import '../../../../core/widgets/therapist_card.dart';
+import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 
 /// "Find your match" — a preview of what the therapist directory (Part F)
@@ -47,10 +47,12 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
   Future<void> _handleContinue() async {
     await context.read<OnboardingCubit>().completeOnboarding();
     if (!mounted) return;
+    // Straight to Register (not AuthGate/Login) — someone finishing
+    // onboarding for the first time is creating an account, not returning
+    // to one. AuthGate is for app relaunches (see SplashScreen), where
+    // AuthBloc's cached session is what should decide the destination.
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => const PlaceholderScreen(message: 'Alias saved! Next up: Authentication (Part D).'),
-      ),
+      MaterialPageRoute(builder: (_) => const AuthGate(startAtRegister: true)),
       (route) => false,
     );
   }

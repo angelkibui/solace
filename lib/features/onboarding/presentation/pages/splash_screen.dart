@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/widgets/placeholder_screen.dart';
+import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 import 'welcome_screen.dart';
 
@@ -43,9 +43,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => hasCompletedOnboarding
-            ? const PlaceholderScreen(message: 'Welcome back! Next up: Home Dashboard (Part E).')
-            : const WelcomeScreen(),
+        builder: (_) => hasCompletedOnboarding ? const AuthGate() : const WelcomeScreen(),
       ),
     );
   }

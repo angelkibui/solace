@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/shared_prefs_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart';
+import 'features/auth/data/repositories/auth_repository.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'features/onboarding/presentation/pages/splash_screen.dart';
 
@@ -10,6 +12,13 @@ import 'features/onboarding/presentation/pages/splash_screen.dart';
 /// rebuilds MaterialApp's theme when ThemeCubit changes. Feature-scoped
 /// Blocs (AppointmentBloc, ChatCubit, etc.) will be provided closer to
 /// where they're used once those parts are built, not here.
+///
+/// AuthBloc is provided here (rather than scoped to just the auth feature)
+/// because AuthGate, which every other feature routes through to check
+/// "is someone logged in", needs it — and AuthBloc's own
+/// authStateChanges subscription is what powers auto-login (Part D12), so
+/// it needs to exist for the app's whole lifetime, not just while auth
+/// screens are on screen.
 class SolaceApp extends StatelessWidget {
   const SolaceApp({super.key});
 
@@ -21,6 +30,7 @@ class SolaceApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => ThemeCubit(prefsService)),
         BlocProvider(create: (_) => OnboardingCubit(prefsService)),
+        BlocProvider(create: (_) => AuthBloc(AuthRepository())),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
