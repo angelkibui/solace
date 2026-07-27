@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/solace_button.dart';
+import '../cubit/onboarding_cubit.dart';
 import 'concern_selection_screen.dart';
 
 /// First screen after splash. Combines the welcome message, the privacy
@@ -34,6 +36,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
     _alias = _generateAlias();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<OnboardingCubit>().setAlias(_alias);
+    });
   }
 
   String _generateAlias() {
@@ -43,7 +48,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return '$adjective$noun$number';
   }
 
-  void _shuffleAlias() => setState(() => _alias = _generateAlias());
+  void _shuffleAlias() {
+    setState(() => _alias = _generateAlias());
+    context.read<OnboardingCubit>().setAlias(_alias);
+  }
 
   void _handleGetStarted() {
     Navigator.of(context).push(

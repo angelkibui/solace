@@ -1,0 +1,13 @@
+rules_version = '2';
+
+// Part D15: users collection — only the owner can read/write their own
+// document. Other collections (therapists, appointments, messages, etc.)
+// get their rules added here as Parts F–L land (see Q1-Q7 in the task
+// sheet) — this file intentionally only covers `users` for now.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
