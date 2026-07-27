@@ -41,6 +41,7 @@ class AuthRepository {
     required String email,
     required String password,
     required String alias,
+    List<String> preferences = const [],
   }) async {
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -60,6 +61,7 @@ class AuthRepository {
         alias: alias.trim(),
         email: email.trim(),
         createdAt: DateTime.now(),
+        preferences: preferences,
         onboardingComplete: true,
       );
       await _usersCollection.doc(user.uid).set(model.toMap());
