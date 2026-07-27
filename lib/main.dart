@@ -1,3 +1,4 @@
+import 'firebase_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,12 +10,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = AppBlocObserver();
 
-  // Wrapped in try/catch so the app still runs (design system + onboarding
-  // preview) before Part A2's Firebase Console project / `flutterfire
-  // configure` step has been completed. Once that's done, this call
-  // connects the app to Firebase for real.
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
     if (kDebugMode) {
       debugPrint(

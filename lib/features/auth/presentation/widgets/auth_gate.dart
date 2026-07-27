@@ -9,21 +9,18 @@ import '../pages/login_screen.dart';
 import '../pages/register_screen.dart';
 import '../pages/verify_email_screen.dart';
 
-/// The single place that turns AuthBloc state into a screen. SplashScreen
-/// and FindMatchPreviewScreen both navigate here rather than to
-/// LoginScreen directly (D12): if Firebase already has a cached session,
-/// AuthBloc's authStateChanges subscription resolves to AuthAuthenticated
-/// almost immediately and this widget skips straight past login.
-///
-/// TEMPORARY: the authenticated branch renders PlaceholderScreen until
-/// Part E (Home Dashboard) exists — swap it for the real Home screen then.
-class AuthGate extends StatelessWidget {
-  /// FindMatchPreviewScreen sets this after onboarding completes, since a
-  /// brand-new user needs Register, not Login. Ignored once a session
-  /// exists (a cached login always wins over this hint).
+class AuthGate extends StatefulWidget {
+
   final bool startAtRegister;
 
   const AuthGate({super.key, this.startAtRegister = false});
+
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  late bool _showRegister = widget.startAtRegister;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +28,12 @@ class AuthGate extends StatelessWidget {
       builder: (context, state) {
         return switch (state) {
           AuthInitial() || AuthLoading() => const _AuthGateLoading(),
+          EmailVerificationSent() => const VerifyEmailScreen(),
           AuthAuthenticated(emailVerified: false) => const VerifyEmailScreen(),
           AuthAuthenticated() => const PlaceholderScreen(message: "You're verified! Next up: Home Dashboard (Part E)."),
-          AuthUnauthenticated() || AuthError() || EmailVerificationSent() =>
-            startAtRegister ? const RegisterScreen() : const LoginScreen(),
+          AuthUnauthenticated() || AuthError() => _showRegister
+              ? RegisterScreen(onSwitchToLogin: () => setState(() => _showRegister = false))
+              : LoginScreen(onSwitchToRegister: () => setState(() => _showRegister = true)),
         };
       },
     );

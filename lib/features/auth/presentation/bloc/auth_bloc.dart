@@ -3,15 +3,11 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/utils/result.dart';
 import '../../data/repositories/auth_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
-/// Owns the entire session lifecycle: login, register, Google sign-in,
-/// logout, password reset, and — via the [AuthRepository.authStateChanges]
-/// subscription below — auto-login on app relaunch (D12). AuthGate
-/// (presentation/widgets/auth_gate.dart) is the only widget that should
-/// read this Bloc's state to decide what to show.
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
   late final StreamSubscription<User?> _authStateSubscription;
@@ -40,10 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final userModel = await _authRepository.getUserModel(user.uid);
     if (userModel == null) {
-      // Firebase Auth has a user but the Firestore doc hasn't been created
-      // yet (mid-registration race) — stay unauthenticated rather than
-      // crash on a null profile; the next authStateChanges tick will
-      // resolve once registerWithEmail finishes writing the doc.
+      
       emit(const AuthUnauthenticated());
       return;
     }
@@ -69,7 +62,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) => emit(AuthError(failure.message)),
-      (_) => emit(const EmailVerificationSent()),
+      (user) => emit(EmailVerificationSent(user)),
     );
   }
 
@@ -84,8 +77,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
     await _authRepository.logout();
-    // No explicit emit here — signing out fires authStateChanges(null),
-    // which _onUserChanged turns into AuthUnauthenticated.
+    
   }
 
   Future<void> _onPasswordResetRequested(PasswordResetRequested event, Emitter<AuthState> emit) async {
@@ -93,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await _authRepository.sendPasswordResetEmail(event.email);
     result.fold(
       (failure) => emit(AuthError(failure.message)),
-      (_) => emit(const AuthUnauthenticated()), // back to a login-adjacent state; ForgotPasswordScreen shows its own success UI
+      (_) => emit(const AuthUnauthenticated()),
     );
   }
 
@@ -101,11 +93,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     EmailVerificationCheckRequested event,
     Emitter<AuthState> emit,
   ) async {
-    final isVerified = await _authRepository.checkEmailVerified();
     final current = state;
-    if (current is AuthAuthenticated) {
-      emit(AuthAuthenticated(current.user, emailVerified: isVerified));
-    }
+    final user = switch (current) {
+      AuthAuthenticated(user: final u) => u,
+      EmailVerificationSent(user: final u) => u,
+      _ => null,
+    };
+    if (user == null) return;
+
+    final isVerified = await _authRepository.checkEmailVerified();
+    emit(AuthAuthenticated(user, emailVerified: isVerified));
   }
 
   Future<void> _onResendVerificationEmailRequested(
@@ -113,8 +110,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     await _authRepository.resendVerificationEmail();
-    // Deliberately no state change: VerifyEmailScreen shows its own
-    // "sent!" snackbar rather than the Bloc re-emitting the same state.
   }
 
   @override

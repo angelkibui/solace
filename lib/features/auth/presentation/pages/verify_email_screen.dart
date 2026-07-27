@@ -8,9 +8,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 
-/// D5 — shown right after registration. Lets the user re-check their
-/// verification status on demand (no background polling, to keep this
-/// cheap on Firebase Auth calls) and resend the link if it didn't arrive.
+/// verification status on demand 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
 
@@ -34,11 +32,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final isVerified = state is AuthAuthenticated && state.emailVerified;
     if (!isVerified && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Not verified yet — check your inbox and try again.")),
+        const SnackBar(content: Text("Not verified yet, check your inbox and try again.")),
       );
     }
-    // If verified, AuthGate rebuilds automatically off the new AuthBloc
-    // state and moves past this screen — no manual navigation needed here.
+  
   }
 
   void _resend() {

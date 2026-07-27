@@ -12,12 +12,12 @@ import '../bloc/auth_state.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
-/// D9 — email/password login, plus "Forgot Password?" and "Sign in with
-/// Google". Navigation onward to the authenticated app happens in AuthGate,
-/// which reacts to AuthBloc's state — this screen only dispatches events
-/// and surfaces errors/loading.
+
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  
+  final VoidCallback? onSwitchToRegister;
+
+  const LoginScreen({super.key, this.onSwitchToRegister});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -139,9 +139,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text("Don't have an account? ", style: AppTextStyles.bodyMedium),
                       GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                        ),
+                        onTap: widget.onSwitchToRegister ??
+                            () => Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                                ),
                         child: Text(
                           'Register',
                           style: AppTextStyles.bodyMedium.copyWith(

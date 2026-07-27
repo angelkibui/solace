@@ -8,17 +8,6 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'features/onboarding/presentation/pages/splash_screen.dart';
 
-/// App root: wires up every app-wide Cubit/Bloc via MultiBlocProvider and
-/// rebuilds MaterialApp's theme when ThemeCubit changes. Feature-scoped
-/// Blocs (AppointmentBloc, ChatCubit, etc.) will be provided closer to
-/// where they're used once those parts are built, not here.
-///
-/// AuthBloc is provided here (rather than scoped to just the auth feature)
-/// because AuthGate, which every other feature routes through to check
-/// "is someone logged in", needs it — and AuthBloc's own
-/// authStateChanges subscription is what powers auto-login (Part D12), so
-/// it needs to exist for the app's whole lifetime, not just while auth
-/// screens are on screen.
 class SolaceApp extends StatelessWidget {
   const SolaceApp({super.key});
 

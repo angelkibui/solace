@@ -83,7 +83,7 @@ void main() {
       ),
       expect: () => [
         const AuthLoading(),
-        const EmailVerificationSent(),
+       EmailVerificationSent(testUser),
       ],
     );
 

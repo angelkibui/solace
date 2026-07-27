@@ -11,14 +11,11 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import 'login_screen.dart';
-import 'verify_email_screen.dart';
 
-/// D10 — alias, email, password, confirm password, terms checkbox. Alias
-/// is pre-filled from whatever WelcomeScreen generated (Part C5) via
-/// OnboardingCubit, but stays editable — someone might land here from a
-/// fresh install without ever running onboarding.
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final VoidCallback? onSwitchToLogin;
+
+  const RegisterScreen({super.key, this.onSwitchToLogin});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -75,10 +72,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: AppColors.error));
-            } else if (state is EmailVerificationSent) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => const VerifyEmailScreen()),
-              );
             }
           },
           child: SingleChildScrollView(
@@ -174,9 +167,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text('Already have an account? ', style: AppTextStyles.bodyMedium),
                       GestureDetector(
-                        onTap: () => Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) => const LoginScreen()),
-                        ),
+                        onTap: widget.onSwitchToLogin ??
+                            () => Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                                ),
                         child: Text(
                           'Log In',
                           style: AppTextStyles.bodyMedium.copyWith(
