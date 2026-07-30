@@ -1,13 +1,42 @@
 rules_version = '2';
 
-// Part D15: users collection — only the owner can read/write their own
-// document. Other collections (therapists, appointments, messages, etc.)
-// get their rules added here as Parts F–L land (see Q1-Q7 in the task
-// sheet) — this file intentionally only covers `users` for now.
 service cloud.firestore {
   match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function isAssignedTherapist(therapistId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/therapists/$(therapistId)).data.providerUid
+          == request.auth.uid;
+    }
+
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if isOwner(userId);
+    }
+
+    match /therapists/{therapistId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /appointments/{appointmentId} {
+      allow create: if isOwner(request.resource.data.userId)
+        && request.resource.data.therapistId is string
+        && request.resource.data.dateTime is timestamp
+        && request.resource.data.amount is int;
+      allow read: if isOwner(resource.data.userId)
+        || isAssignedTherapist(resource.data.therapistId);
+      allow update, delete: if isOwner(resource.data.userId);
     }
   }
 }
