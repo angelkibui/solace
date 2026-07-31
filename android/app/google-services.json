@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "402979541096",
+    "project_id": "solace-rwanda",
+    "storage_bucket": "solace-rwanda.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402979541096:android:531cc4763767d0162e2bdd",
+        "android_client_info": {
+          "package_name": "com.example.solace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402979541096-klf76mluana7o1ebrfhp5jea756g9evl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBemKHI3f0gg3TS3nyBIEPgccrsg4Jgf1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402979541096-klf76mluana7o1ebrfhp5jea756g9evl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.solace"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

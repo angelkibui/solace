@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDJgEji-jXeVBhwiRnjBBk-87Padcwhi08</string>
+	<key>GCM_SENDER_ID</key>
+	<string>402979541096</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.solace</string>
+	<key>PROJECT_ID</key>
+	<string>solace-rwanda</string>
+	<key>STORAGE_BUCKET</key>
+	<string>solace-rwanda.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:402979541096:ios:b04f5738a1b718752e2bdd</string>
+</dict>
+</plist>
