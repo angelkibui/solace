@@ -51,13 +51,17 @@ class SolaceButton extends StatelessWidget {
         ? SizedBox(
             height: spinnerSize,
             width: spinnerSize,
-            child: const CircularProgressIndicator(strokeWidth: 2.4, color: Colors.white),
+            child: const CircularProgressIndicator(
+                strokeWidth: 2.4, color: Colors.white),
           )
         : Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
+              if (icon != null) ...[
+                Icon(icon, size: 20),
+                const SizedBox(width: 8)
+              ],
               Text(label, style: textStyle),
             ],
           );
@@ -69,13 +73,15 @@ class SolaceButton extends StatelessWidget {
     final Widget button = switch (variant) {
       SolaceButtonVariant.primary => ElevatedButton(
           onPressed: _isDisabled ? null : onPressed,
-          style: height != null
-              ? ElevatedButton.styleFrom(
-                  minimumSize: Size(0, height!),
-                  padding: compactPadding,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(height! / 2)),
-                )
-              : null,
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(0, height ?? 52),
+            padding: compactPadding,
+            shape: height == null
+                ? null
+                : RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(height! / 2),
+                  ),
+          ),
           child: child,
         ),
       SolaceButtonVariant.secondary => ElevatedButton(
@@ -86,24 +92,29 @@ class SolaceButton extends StatelessWidget {
             minimumSize: Size(0, height ?? 52),
             padding: compactPadding,
             textStyle: AppTextStyles.button,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(height != null ? height! / 2 : 14)),
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(height != null ? height! / 2 : 14)),
           ),
           child: child,
         ),
       SolaceButtonVariant.outline => OutlinedButton(
           onPressed: _isDisabled ? null : onPressed,
-          style: height != null
-              ? OutlinedButton.styleFrom(
-                  minimumSize: Size(0, height!),
-                  padding: compactPadding,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(height! / 2)),
-                )
-              : null,
+          style: OutlinedButton.styleFrom(
+            minimumSize: Size(0, height ?? 52),
+            padding: compactPadding,
+            shape: height == null
+                ? null
+                : RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(height! / 2),
+                  ),
+          ),
           child: isLoading
               ? SizedBox(
                   height: spinnerSize,
                   width: spinnerSize,
-                  child: const CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.primary),
+                  child: const CircularProgressIndicator(
+                      strokeWidth: 2.4, color: AppColors.primary),
                 )
               : child,
         ),
