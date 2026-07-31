@@ -51,8 +51,6 @@ class SolaceApp extends StatelessWidget {
     );
   }
 }
-<<<<<<< HEAD
-=======
 
 /// Shown instead of the real app when Firebase couldn't initialize.
 /// Deliberately has no MultiBlocProvider/AuthBloc underneath it — nothing
