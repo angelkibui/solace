@@ -1,0 +1,57 @@
+[
+  {
+    "id": "sobriety-circle",
+    "name": "Sobriety Circle",
+    "description": "A moderated space for recovery, one day at a time. Share wins, setbacks, and coping strategies with people who understand.",
+    "category": "Recovery Networks",
+    "memberCount": 214,
+    "isModerated": true,
+    "moderatorName": "Eric Mugisha",
+    "imageUrl": "",
+    "memberIds": []
+  },
+  {
+    "id": "anxiety-support",
+    "name": "Anxiety Support",
+    "description": "Share coping strategies with people who understand what persistent worry actually feels like day to day.",
+    "category": "Anxiety Support",
+    "memberCount": 356,
+    "isModerated": true,
+    "moderatorName": "Diane Uwase",
+    "imageUrl": "",
+    "memberIds": []
+  },
+  {
+    "id": "young-professionals",
+    "name": "Young Professionals",
+    "description": "Managing work stress and burnout, together. For anyone juggling a demanding job with their mental health.",
+    "category": "Work Stress",
+    "memberCount": 189,
+    "isModerated": true,
+    "moderatorName": "Jean-Luc Nshimiye",
+    "imageUrl": "",
+    "memberIds": []
+  },
+  {
+    "id": "grief-and-loss",
+    "name": "Grief & Loss",
+    "description": "A gentle space to talk about loss, however recent or long ago, without needing to explain yourself.",
+    "category": "Grief Support",
+    "memberCount": 97,
+    "isModerated": true,
+    "moderatorName": "Claudine Ineza",
+    "imageUrl": "",
+    "memberIds": []
+  },
+  {
+    "id": "family-and-relationships",
+    "name": "Family & Relationships",
+    "description": "Navigating family conflict, relationship strain, and the pressure to keep it all together for everyone else.",
+    "category": "Family Conflict",
+    "memberCount": 142,
+    "isModerated": true,
+    "moderatorName": "Patrick Habimana",
+    "imageUrl": "",
+    "memberIds": []
+  }
+]
