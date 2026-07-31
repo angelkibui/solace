@@ -125,16 +125,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ProfileUpdateRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(const AuthLoading());
+    final current = state;
+    if (current is! AuthAuthenticated || current.isUpdatingProfile) return;
+
+    emit(current.copyWith(
+      isUpdatingProfile: true,
+      clearProfileError: true,
+    ));
     final result = await _authRepository.updateProfile(
-      uid: event.uid,
       alias: event.alias,
       preferences: event.preferences,
     );
     result.fold(
-      (failure) => emit(AuthError(failure.message)),
-      (user) => emit(AuthAuthenticated(user,
-          emailVerified: _authRepository.currentUser?.emailVerified ?? true)),
+      (failure) => emit(current.copyWith(
+        isUpdatingProfile: false,
+        profileErrorMessage: failure.message,
+      )),
+      (user) => emit(current.copyWith(
+        user: user,
+        isUpdatingProfile: false,
+        clearProfileError: true,
+      )),
     );
   }
 

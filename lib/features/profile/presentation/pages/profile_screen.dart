@@ -6,6 +6,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/theme_cubit.dart';
+import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/concern_chip.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/solace_button.dart';
@@ -31,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _aliasController;
   late Set<String> _selectedConcerns;
   bool _isEditing = false;
+  bool _savePending = false;
 
   UserModel? _user;
 
@@ -61,25 +63,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _cancelEditing() {
     _syncFromBloc();
-    setState(() => _isEditing = false);
+    setState(() {
+      _isEditing = false;
+      _savePending = false;
+    });
   }
 
   void _saveProfile() {
-    final user = _user;
-    if (user == null) return;
     final alias = _aliasController.text.trim();
-    if (alias.isEmpty) {
+    final validationError = Validators.alias(alias);
+    if (validationError != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Alias cannot be empty.')),
+        SnackBar(content: Text(validationError)),
       );
       return;
     }
+    setState(() => _savePending = true);
     context.read<AuthBloc>().add(ProfileUpdateRequested(
-          uid: user.uid,
           alias: alias,
           preferences: _selectedConcerns.toList(),
         ));
-    setState(() => _isEditing = false);
   }
 
   void _toggleConcern(String concern) {
@@ -98,9 +101,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           _user = state.user;
+          if (_savePending && !state.isUpdatingProfile) {
+            _savePending = false;
+            if (state.profileErrorMessage == null) {
+              setState(() => _isEditing = false);
+            }
+          }
           if (!_isEditing) {
             _aliasController.text = state.user.alias;
             _selectedConcerns = Set<String>.from(state.user.preferences);
+          }
+          final error = state.profileErrorMessage;
+          if (error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(error),
+                backgroundColor: AppColors.error,
+              ),
+            );
           }
         }
         if (state is AuthError) {
@@ -113,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
       builder: (context, state) {
-        final isLoading = state is AuthLoading;
+        final isLoading = state is AuthAuthenticated && state.isUpdatingProfile;
         final user = _user;
 
         return Scaffold(
@@ -129,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               if (_isEditing) ...[
                 TextButton(
-                  onPressed: _cancelEditing,
+                  onPressed: isLoading ? null : _cancelEditing,
                   child: const Text('Cancel'),
                 ),
                 TextButton(
@@ -177,7 +195,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return ConcernChip(
                       label: option.title,
                       isSelected: selected,
-                      onSelected: _isEditing ? (_) => _toggleConcern(option.title) : null,
+                      onSelected: _isEditing
+                          ? (_) => _toggleConcern(option.title)
+                          : null,
                     );
                   }).toList(),
                 ),
@@ -236,9 +256,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   label: 'Sign out',
                   variant: SolaceButtonVariant.outline,
                   icon: Icons.logout_rounded,
-                  onPressed: isLoading
-                      ? null
-                      : () => _confirmLogout(context),
+                  onPressed: isLoading ? null : () => _confirmLogout(context),
                 ),
                 const SizedBox(height: 16),
               ],
@@ -321,7 +339,9 @@ class _AvatarHeader extends StatelessWidget {
               controller: aliasController,
               textAlign: TextAlign.center,
               style: AppTextStyles.headingMedium,
-              maxLength: 30,
+              maxLength: 24,
+              autovalidateMode: AutovalidateMode.onUnfocus,
+              validator: Validators.alias,
               decoration: const InputDecoration(
                 hintText: 'Your alias',
                 counterText: '',
@@ -404,7 +424,9 @@ class _SettingsTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w500)),
+                    Text(title,
+                        style: AppTextStyles.bodyMedium
+                            .copyWith(fontWeight: FontWeight.w500)),
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),
                       Text(subtitle!, style: AppTextStyles.caption),

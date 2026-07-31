@@ -19,10 +19,40 @@ class AuthLoading extends AuthState {
 class AuthAuthenticated extends AuthState {
   final UserModel user;
   final bool emailVerified;
-  const AuthAuthenticated(this.user, {this.emailVerified = true});
+  final bool isUpdatingProfile;
+  final String? profileErrorMessage;
+
+  const AuthAuthenticated(
+    this.user, {
+    this.emailVerified = true,
+    this.isUpdatingProfile = false,
+    this.profileErrorMessage,
+  });
+
+  AuthAuthenticated copyWith({
+    UserModel? user,
+    bool? emailVerified,
+    bool? isUpdatingProfile,
+    String? profileErrorMessage,
+    bool clearProfileError = false,
+  }) {
+    return AuthAuthenticated(
+      user ?? this.user,
+      emailVerified: emailVerified ?? this.emailVerified,
+      isUpdatingProfile: isUpdatingProfile ?? this.isUpdatingProfile,
+      profileErrorMessage: clearProfileError
+          ? null
+          : profileErrorMessage ?? this.profileErrorMessage,
+    );
+  }
 
   @override
-  List<Object?> get props => [user, emailVerified];
+  List<Object?> get props => [
+        user,
+        emailVerified,
+        isUpdatingProfile,
+        profileErrorMessage,
+      ];
 }
 
 class AuthUnauthenticated extends AuthState {
