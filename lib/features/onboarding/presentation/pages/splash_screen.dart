@@ -6,9 +6,7 @@ import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 import 'welcome_screen.dart';
 
-/// First screen shown on launch. Fades in the Solace logo, then checks
-/// whether onboarding was already completed on this device (C7) — if so
-/// it skips straight past onboarding; otherwise it shows the flow.
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

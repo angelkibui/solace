@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -56,15 +47,42 @@ class DefaultFirebaseOptions {
     projectId: 'solace-rwanda',
     storageBucket: 'solace-rwanda.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDJgEji-jXeVBhwiRnjBBk-87Padcwhi08',
     appId: '1:402979541096:ios:b04f5738a1b718752e2bdd',
     messagingSenderId: '402979541096',
     projectId: 'solace-rwanda',
     storageBucket: 'solace-rwanda.firebasestorage.app',
-    iosClientId:
-        '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
+    iosClientId: '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
     iosBundleId: 'com.example.solace',
+  );
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAHn1qx51PUtaQUiyLgCcnxMGpJhBe_UCo',
+    appId: '1:402979541096:web:a40011f18ac9b7f22e2bdd',
+    messagingSenderId: '402979541096',
+    projectId: 'solace-rwanda',
+    authDomain: 'solace-rwanda.firebaseapp.com',
+    storageBucket: 'solace-rwanda.firebasestorage.app',
+    measurementId: 'G-H4HBLFYZF3',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDJgEji-jXeVBhwiRnjBBk-87Padcwhi08',
+    appId: '1:402979541096:ios:b04f5738a1b718752e2bdd',
+    messagingSenderId: '402979541096',
+    projectId: 'solace-rwanda',
+    storageBucket: 'solace-rwanda.firebasestorage.app',
+    iosClientId: '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
+    iosBundleId: 'com.example.solace',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAHn1qx51PUtaQUiyLgCcnxMGpJhBe_UCo',
+    appId: '1:402979541096:web:3244df5e273625cf2e2bdd',
+    messagingSenderId: '402979541096',
+    projectId: 'solace-rwanda',
+    authDomain: 'solace-rwanda.firebaseapp.com',
+    storageBucket: 'solace-rwanda.firebasestorage.app',
+    measurementId: 'G-XZD9W85F8S',
   );
 }

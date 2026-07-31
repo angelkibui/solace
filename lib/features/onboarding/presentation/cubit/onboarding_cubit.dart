@@ -2,16 +2,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/shared_prefs_service.dart';
 import 'onboarding_state.dart';
 
-/// Tracks which concern chips are selected on the "What's on your mind
-/// today?" screen, and whether onboarding has been completed before (so
-/// SplashScreen can skip straight past it on relaunch — see C7).
 class OnboardingCubit extends Cubit<OnboardingState> {
   final SharedPrefsService _prefsService;
 
   OnboardingCubit(this._prefsService) : super(const OnboardingState());
 
-  /// Called by WelcomeScreen whenever the alias is generated or shuffled
-  /// (Part C5), so it's available to pre-fill Register (Part D10) later.
+ 
   void setAlias(String alias) {
     emit(state.copyWith(alias: alias));
   }
@@ -27,8 +23,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         selectedConcerns: updated, status: OnboardingStatus.inProgress));
   }
 
-  /// Called once by SplashScreen on app launch to decide whether to show
-  /// onboarding again or skip straight to the app.
+
   Future<bool> hasCompletedOnboarding() =>
       _prefsService.getOnboardingComplete();
 
