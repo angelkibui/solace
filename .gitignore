@@ -9,6 +9,9 @@
 .history
 .svn/
 migrate_working_dir/
+node_modules/
+serviceAccountKey.json
+
 
 # IntelliJ
 *.iml
@@ -67,3 +70,7 @@ migrate_working_dir/
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+serviceAccountKey.json
+
+node_modules/
