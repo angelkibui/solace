@@ -10,10 +10,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = AppBlocObserver();
 
+  var firebaseReady = true;
   try {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
+    firebaseReady = false;
     if (kDebugMode) {
       debugPrint(
         'Firebase did not initialize: $e\n'
@@ -23,5 +25,5 @@ Future<void> main() async {
     }
   }
 
-  runApp(const SolaceApp());
+  runApp(SolaceApp(firebaseReady: firebaseReady));
 }

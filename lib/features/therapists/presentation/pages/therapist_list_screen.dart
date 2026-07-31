@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/widgets/custom_bottom_nav_bar.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/loading_shimmer.dart';
 import '../../../../core/widgets/therapist_card.dart';
@@ -135,19 +134,6 @@ class TherapistListScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 1,
-        onTap: (index) {
-          if (index == 1) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'This section is being prepared by another team member.',
-              ),
-            ),
-          );
-        },
       ),
     );
   }
