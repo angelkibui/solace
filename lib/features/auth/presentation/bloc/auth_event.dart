@@ -31,11 +31,22 @@ class RegisterRequested extends AuthEvent {
   final String alias;
   final String email;
   final String password;
-  const RegisterRequested(
-      {required this.alias, required this.email, required this.password});
+
+  /// Concerns picked on ConcernSelectionScreen (Part C3), read from
+  /// OnboardingCubit by RegisterScreen. Seeds UserModel.preferences so
+  /// Home's "Recommended for you" (Part E) has something to personalize
+  /// against from the very first login.
+  final List<String> preferences;
+
+  const RegisterRequested({
+    required this.alias,
+    required this.email,
+    required this.password,
+    this.preferences = const [],
+  });
 
   @override
-  List<Object?> get props => [alias, email, password];
+  List<Object?> get props => [alias, email, password, preferences];
 }
 
 class GoogleSignInRequested extends AuthEvent {
