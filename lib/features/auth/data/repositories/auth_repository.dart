@@ -48,9 +48,10 @@ class AuthRepository {
         password: password,
       );
       final user = credential.user;
-      if (user == null)
+      if (user == null) {
         return const ResultError(
             AuthFailure('Registration failed. Please try again.'));
+      }
 
       await user.sendEmailVerification();
 
@@ -84,9 +85,10 @@ class AuthRepository {
         password: password,
       );
       final user = credential.user;
-      if (user == null)
+      if (user == null) {
         return const ResultError(
             AuthFailure('Login failed. Please try again.'));
+      }
 
       return Success(await _fetchOrCreateUserDoc(user));
     } on FirebaseAuthException catch (e) {
@@ -116,9 +118,10 @@ class AuthRepository {
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);
       final user = userCredential.user;
-      if (user == null)
+      if (user == null) {
         return const ResultError(
             AuthFailure('Google sign-in failed. Please try again.'));
+      }
 
       return Success(
           await _fetchOrCreateUserDoc(user, fallbackEmail: googleUser.email));
@@ -134,9 +137,10 @@ class AuthRepository {
   Future<Result<void>> resendVerificationEmail() async {
     try {
       final user = _firebaseAuth.currentUser;
-      if (user == null)
+      if (user == null) {
         return const ResultError(
             AuthFailure('You need to be signed in to do that.'));
+      }
       await user.sendEmailVerification();
       return const Success(null);
     } on FirebaseAuthException catch (e) {
