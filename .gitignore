@@ -27,6 +27,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/coverage/
 **/ios/Flutter/.last_build_id
 
 # Firebase (keep config out of git if this repo goes public)
@@ -71,4 +72,3 @@ ios/Runner/GoogleService-Info.plist
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
-
