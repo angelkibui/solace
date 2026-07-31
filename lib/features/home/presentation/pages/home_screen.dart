@@ -139,31 +139,31 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           const SizedBox(height: 8),
-                          SizedBox(
-                            height: 260,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              itemCount: recommendedTherapists.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 12),
-                              itemBuilder: (context, index) {
-                                final t = recommendedTherapists[index];
-                                return SizedBox(
-                                  width: 280,
-                                  child: TherapistCard(
-                                    name: t.name,
-                                    roleLabel: t.roleLabel,
-                                    traits: t.concernTags,
-                                    bio: t.bio,
-                                    languages: t.languages,
-                                    rate: t.rate,
-                                    rating: t.rating,
-                                    reviewCount: t.reviewCount,
-                                    onTap: () => widget.onNavigateToTab(1),
-                                    onBook: () => widget.onNavigateToTab(1),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (final (i, t) in recommendedTherapists.indexed) ...[
+                                  SizedBox(
+                                    width: 280,
+                                    child: TherapistCard(
+                                      name: t.name,
+                                      roleLabel: t.roleLabel,
+                                      traits: t.concernTags,
+                                      bio: t.bio,
+                                      languages: t.languages,
+                                      rate: t.rate,
+                                      rating: t.rating,
+                                      reviewCount: t.reviewCount,
+                                      onTap: () => widget.onNavigateToTab(1),
+                                      onBook: () => widget.onNavigateToTab(1),
+                                    ),
                                   ),
-                                );
-                              },
+                                  if (i != recommendedTherapists.length - 1) const SizedBox(width: 12),
+                                ],
+                              ],
                             ),
                           ),
                           const SizedBox(height: 28),
@@ -172,26 +172,26 @@ class _HomeScreenState extends State<HomeScreen> {
                             onSeeAll: () => widget.onNavigateToTab(2),
                           ),
                           const SizedBox(height: 12),
-                          SizedBox(
-                            height: 190,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              itemCount: trendingCircles.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 12),
-                              itemBuilder: (context, index) {
-                                final c = trendingCircles[index];
-                                return SizedBox(
-                                  width: 220,
-                                  child: CircleCard(
-                                    title: c.title,
-                                    description: c.description,
-                                    memberCount: c.memberCount,
-                                    onTap: () => widget.onNavigateToTab(2),
-                                    onJoinToggle: () => widget.onNavigateToTab(2),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (final (i, c) in trendingCircles.indexed) ...[
+                                  SizedBox(
+                                    width: 220,
+                                    child: CircleCard(
+                                      title: c.title,
+                                      description: c.description,
+                                      memberCount: c.memberCount,
+                                      onTap: () => widget.onNavigateToTab(2),
+                                      onJoinToggle: () => widget.onNavigateToTab(2),
+                                    ),
                                   ),
-                                );
-                              },
+                                  if (i != trendingCircles.length - 1) const SizedBox(width: 12),
+                                ],
+                              ],
                             ),
                           ),
                         ],
