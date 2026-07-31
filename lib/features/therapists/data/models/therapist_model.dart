@@ -14,6 +14,7 @@ class TherapistModel extends Equatable {
   final int reviewCount;
   final String location;
   final String gender;
+  final String providerUid;
   final List<DateTime> availability;
 
   const TherapistModel({
@@ -29,6 +30,7 @@ class TherapistModel extends Equatable {
     required this.reviewCount,
     required this.location,
     required this.gender,
+    this.providerUid = '',
     required this.availability,
   });
 
@@ -53,6 +55,7 @@ class TherapistModel extends Equatable {
       reviewCount: (map['reviewCount'] as num?)?.round() ?? 0,
       location: map['location'] as String? ?? 'Kigali, Rwanda',
       gender: map['gender'] as String? ?? 'Not specified',
+      providerUid: map['providerUid'] as String? ?? '',
       availability: rawAvailability
           .whereType<Timestamp>()
           .map((timestamp) => timestamp.toDate())
@@ -73,6 +76,7 @@ class TherapistModel extends Equatable {
       'reviewCount': reviewCount,
       'location': location,
       'gender': gender,
+      'providerUid': providerUid,
       'availability': availability.map(Timestamp.fromDate).toList(),
     };
   }
@@ -90,6 +94,7 @@ class TherapistModel extends Equatable {
     int? reviewCount,
     String? location,
     String? gender,
+    String? providerUid,
     List<DateTime>? availability,
   }) {
     return TherapistModel(
@@ -105,24 +110,26 @@ class TherapistModel extends Equatable {
       reviewCount: reviewCount ?? this.reviewCount,
       location: location ?? this.location,
       gender: gender ?? this.gender,
+      providerUid: providerUid ?? this.providerUid,
       availability: availability ?? this.availability,
     );
   }
 
   @override
   List<Object?> get props => [
-    id,
-    name,
-    title,
-    specialties,
-    languages,
-    rate,
-    bio,
-    photoUrl,
-    rating,
-    reviewCount,
-    location,
-    gender,
-    availability,
-  ];
+        id,
+        name,
+        title,
+        specialties,
+        languages,
+        rate,
+        bio,
+        photoUrl,
+        rating,
+        reviewCount,
+        location,
+        gender,
+        providerUid,
+        availability,
+      ];
 }
