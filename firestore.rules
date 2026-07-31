@@ -36,7 +36,11 @@ service cloud.firestore {
         && request.resource.data.amount is int;
       allow read: if isOwner(resource.data.userId)
         || isAssignedTherapist(resource.data.therapistId);
-      allow update, delete: if isOwner(resource.data.userId);
+      allow update: if isOwner(resource.data.userId)
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.therapistId == resource.data.therapistId
+        && request.resource.data.amount == resource.data.amount;
+      allow delete: if isOwner(resource.data.userId);
     }
 
     match /transactions/{transactionId} {
@@ -44,7 +48,13 @@ service cloud.firestore {
         && request.resource.data.appointmentId is string
         && request.resource.data.transactionId is string
         && request.resource.data.amount is int;
-      allow read, update, delete: if isOwner(resource.data.userId);
+      allow read: if isOwner(resource.data.userId);
+      allow update: if isOwner(resource.data.userId)
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.appointmentId == resource.data.appointmentId
+        && request.resource.data.transactionId == resource.data.transactionId
+        && request.resource.data.amount == resource.data.amount;
+      allow delete: if isOwner(resource.data.userId);
     }
   }
 }
