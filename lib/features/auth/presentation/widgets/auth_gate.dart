@@ -33,11 +33,11 @@ class _AuthGateState extends State<AuthGate> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return switch (state) {
-          AuthInitial() || AuthLoading() => const _AuthGateLoading(),
+          AuthInitial() => const _AuthGateLoading(),
           EmailVerificationSent() => const VerifyEmailScreen(),
           AuthAuthenticated(emailVerified: false) => const VerifyEmailScreen(),
           AuthAuthenticated() => const MainShell(),
-          AuthUnauthenticated() || AuthError() => _showRegister
+          AuthLoading() || AuthUnauthenticated() || AuthError() => _showRegister
               ? RegisterScreen(
                   onSwitchToLogin: () => setState(() => _showRegister = false),
                 )
