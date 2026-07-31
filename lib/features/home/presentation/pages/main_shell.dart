@@ -11,6 +11,10 @@ import '../../../appointments/presentation/pages/booking_flow_screen.dart';
 import '../../../appointments/presentation/pages/my_appointments_screen.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../circles/data/repositories/circle_repository.dart';
+import '../../../circles/presentation/bloc/circle_bloc.dart';
+import '../../../circles/presentation/bloc/circle_event.dart';
+import '../../../circles/presentation/pages/circles_list_screen.dart';
 import '../../../payments/data/repositories/payment_repository.dart';
 import '../../../payments/presentation/bloc/payment_bloc.dart';
 import '../../../payments/presentation/bloc/payment_event.dart';
@@ -60,6 +64,9 @@ class _MainShellState extends State<MainShell> {
         BlocProvider(
           create: (_) => PaymentBloc(PaymentRepository())..add(TransactionsRequested(userId)),
         ),
+        BlocProvider(
+          create: (_) => CircleBloc(CircleRepository(), userId: userId)..add(const CirclesRequested()),
+        ),
       ],
       child: Builder(
         builder: (context) => Scaffold(
@@ -72,11 +79,7 @@ class _MainShellState extends State<MainShell> {
                 onOpenAppointments: () => _openAppointments(context),
                 onOpenTransactions: () => _openTransactions(context),
               ),
-              const ComingSoonTab(
-                title: 'Circles',
-                icon: Icons.groups_rounded,
-                partLabel: 'Part I (Community Circles)',
-              ),
+              const CirclesListScreen(),
               const ComingSoonTab(
                 title: 'Chat',
                 icon: Icons.chat_bubble_rounded,
