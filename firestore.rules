@@ -38,5 +38,13 @@ service cloud.firestore {
         || isAssignedTherapist(resource.data.therapistId);
       allow update, delete: if isOwner(resource.data.userId);
     }
+
+    match /transactions/{transactionId} {
+      allow create: if isOwner(request.resource.data.userId)
+        && request.resource.data.appointmentId is string
+        && request.resource.data.transactionId is string
+        && request.resource.data.amount is int;
+      allow read, update, delete: if isOwner(resource.data.userId);
+    }
   }
 }
