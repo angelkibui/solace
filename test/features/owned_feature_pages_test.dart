@@ -89,10 +89,10 @@ void main() {
     expect(booked, isTrue);
     expect(tester.takeException(), isNull);
 
-    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.physicalSize = const Size(844, 390);
     await tester.pumpAndSettle();
     expect(find.text('Book Consultation'), findsOneWidget);
-    expect(tester.takeException(), isNull);
+    expect(tester.takeException(), isNull, reason: 'landscape profile layout');
   });
 
   testWidgets('reservation confirmation summarizes the selected session', (

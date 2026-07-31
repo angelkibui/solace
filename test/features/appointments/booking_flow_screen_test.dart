@@ -65,5 +65,13 @@ void main() {
     expect(find.text('Review Booking'), findsOneWidget);
     expect(find.text('Proceed to Payment'), findsOneWidget);
     expect(find.text('Dr. Aline Mutoni'), findsOneWidget);
+
+    tester.view.physicalSize = const Size(844, 390);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpAndSettle();
+    expect(find.text('Review Booking'), findsOneWidget);
+    expect(tester.takeException(), isNull, reason: 'landscape booking layout');
   });
 }
