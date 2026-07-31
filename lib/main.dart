@@ -11,7 +11,8 @@ Future<void> main() async {
   Bloc.observer = AppBlocObserver();
 
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
   } catch (e) {
     if (kDebugMode) {
       debugPrint(

@@ -1,23 +1,26 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class ConcernOption {
   final String title;
   final String description;
   final IconData icon;
 
-  const ConcernOption({required this.title, required this.description, required this.icon});
+  const ConcernOption(
+      {required this.title, required this.description, required this.icon});
 }
 
 class AppConstants {
   AppConstants._();
 
   static const String appName = 'Solace';
-  static const String appTagline = 'Healing begins with a safe space. No names, no labels, just you.';
+  static const String appTagline =
+      'Healing begins with a safe space. No names, no labels, just you.';
 
   static const List<ConcernOption> concerns = <ConcernOption>[
     ConcernOption(
       title: 'Work Stress',
-      description: 'Pressure, deadlines, or burnout in your professional environment.',
+      description:
+          'Pressure, deadlines, or burnout in your professional environment.',
       icon: Icons.work_outline_rounded,
     ),
     ConcernOption(
@@ -37,7 +40,8 @@ class AppConstants {
     ),
     ConcernOption(
       title: 'Relationship Issues',
-      description: 'Conflict, distance, or communication struggles with people close to you.',
+      description:
+          'Conflict, distance, or communication struggles with people close to you.',
       icon: Icons.favorite_border_rounded,
     ),
     ConcernOption(

@@ -29,7 +29,8 @@ void main() {
     authRepository = MockAuthRepository();
     // Every AuthBloc subscribes to this in its constructor (Part D12) —
     // stub it for every test so the Bloc can even be constructed.
-    when(() => authRepository.authStateChanges).thenAnswer((_) => const Stream<User?>.empty());
+    when(() => authRepository.authStateChanges)
+        .thenAnswer((_) => const Stream<User?>.empty());
     when(() => authRepository.currentUser).thenReturn(null);
   });
 
@@ -43,7 +44,8 @@ void main() {
             )).thenAnswer((_) async => Success(testUser));
       },
       build: () => AuthBloc(authRepository),
-      act: (bloc) => bloc.add(const LoginRequested(email: 'kevin@example.com', password: 'password1')),
+      act: (bloc) => bloc.add(const LoginRequested(
+          email: 'kevin@example.com', password: 'password1')),
       expect: () => [
         const AuthLoading(),
         AuthAuthenticated(testUser, emailVerified: false),
@@ -54,12 +56,15 @@ void main() {
       'emits [AuthLoading, AuthError] on failed login',
       setUp: () {
         when(() => authRepository.loginWithEmail(
-              email: any(named: 'email'),
-              password: any(named: 'password'),
-            )).thenAnswer((_) async => const ResultError(AuthFailure('Incorrect email or password.')));
+                  email: any(named: 'email'),
+                  password: any(named: 'password'),
+                ))
+            .thenAnswer((_) async =>
+                const ResultError(AuthFailure('Incorrect email or password.')));
       },
       build: () => AuthBloc(authRepository),
-      act: (bloc) => bloc.add(const LoginRequested(email: 'kevin@example.com', password: 'wrong')),
+      act: (bloc) => bloc.add(
+          const LoginRequested(email: 'kevin@example.com', password: 'wrong')),
       expect: () => [
         const AuthLoading(),
         const AuthError('Incorrect email or password.'),
@@ -79,11 +84,14 @@ void main() {
       },
       build: () => AuthBloc(authRepository),
       act: (bloc) => bloc.add(
-        const RegisterRequested(alias: 'BraveRiver12345', email: 'kevin@example.com', password: 'password1'),
+        const RegisterRequested(
+            alias: 'BraveRiver12345',
+            email: 'kevin@example.com',
+            password: 'password1'),
       ),
       expect: () => [
         const AuthLoading(),
-       EmailVerificationSent(testUser),
+        EmailVerificationSent(testUser),
       ],
     );
 
@@ -91,14 +99,19 @@ void main() {
       'emits [AuthLoading, AuthError] when the email is already in use',
       setUp: () {
         when(() => authRepository.registerWithEmail(
-              alias: any(named: 'alias'),
-              email: any(named: 'email'),
-              password: any(named: 'password'),
-            )).thenAnswer((_) async => const ResultError(AuthFailure('An account already exists with that email.')));
+                  alias: any(named: 'alias'),
+                  email: any(named: 'email'),
+                  password: any(named: 'password'),
+                ))
+            .thenAnswer((_) async => const ResultError(
+                AuthFailure('An account already exists with that email.')));
       },
       build: () => AuthBloc(authRepository),
       act: (bloc) => bloc.add(
-        const RegisterRequested(alias: 'BraveRiver12345', email: 'kevin@example.com', password: 'password1'),
+        const RegisterRequested(
+            alias: 'BraveRiver12345',
+            email: 'kevin@example.com',
+            password: 'password1'),
       ),
       expect: () => [
         const AuthLoading(),
@@ -118,7 +131,8 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'emits AuthAuthenticated when a cached session resolves to a known user doc',
       setUp: () {
-        when(() => authRepository.getUserModel(any())).thenAnswer((_) async => testUser);
+        when(() => authRepository.getUserModel(any()))
+            .thenAnswer((_) async => testUser);
       },
       build: () => AuthBloc(authRepository),
       act: (bloc) {

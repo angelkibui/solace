@@ -14,6 +14,11 @@ class MockTherapistRepository extends Mock implements TherapistRepository {}
 
 void main() {
   testWidgets('displays and searches loaded professionals', (tester) async {
+    tester.view.physicalSize = const Size(844, 390);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     final repository = MockTherapistRepository();
     final therapists = [
       TherapistModel(
@@ -71,5 +76,7 @@ void main() {
 
     expect(find.text('Dr. Aline Mutoni'), findsOneWidget);
     expect(find.text('Jean-Luc Nshimiye'), findsNothing);
+    expect(tester.takeException(), isNull,
+        reason: 'landscape directory layout');
   });
 }

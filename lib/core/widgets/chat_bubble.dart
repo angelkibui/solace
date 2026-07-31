@@ -32,7 +32,8 @@ class ChatBubble extends StatelessWidget {
       alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+        constraints:
+            BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           color: bubbleColor,
@@ -47,7 +48,8 @@ class ChatBubble extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(text, style: AppTextStyles.bodyMedium.copyWith(color: textColor)),
+            Text(text,
+                style: AppTextStyles.bodyMedium.copyWith(color: textColor)),
             const SizedBox(height: 4),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -55,7 +57,9 @@ class ChatBubble extends StatelessWidget {
                 Text(
                   DateFormat('HH:mm').format(timestamp),
                   style: AppTextStyles.caption.copyWith(
-                    color: isSentByMe ? Colors.white.withValues(alpha: 0.75) : AppColors.textSecondary,
+                    color: isSentByMe
+                        ? Colors.white.withValues(alpha: 0.75)
+                        : AppColors.textSecondary,
                   ),
                 ),
                 if (isSentByMe) ...[
@@ -63,7 +67,9 @@ class ChatBubble extends StatelessWidget {
                   Icon(
                     isRead ? Icons.done_all_rounded : Icons.done_rounded,
                     size: 14,
-                    color: isRead ? Colors.lightBlueAccent : Colors.white.withValues(alpha: 0.75),
+                    color: isRead
+                        ? Colors.lightBlueAccent
+                        : Colors.white.withValues(alpha: 0.75),
                   ),
                 ],
               ],

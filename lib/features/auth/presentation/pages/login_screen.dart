@@ -12,9 +12,7 @@ import '../bloc/auth_state.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
-
 class LoginScreen extends StatefulWidget {
-  
   final VoidCallback? onSwitchToRegister;
 
   const LoginScreen({super.key, this.onSwitchToRegister});
@@ -39,7 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     context.read<AuthBloc>().add(
-          LoginRequested(email: _emailController.text, password: _passwordController.text),
+          LoginRequested(
+              email: _emailController.text, password: _passwordController.text),
         );
   }
 
@@ -52,7 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is AuthError) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: AppColors.error));
+                ..showSnackBar(SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: AppColors.error));
             }
           },
           child: SingleChildScrollView(
@@ -83,11 +84,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     hint: 'Enter your password',
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    validator: (v) => (v == null || v.isEmpty) ? 'Password is required.' : null,
+                    validator: (v) => (v == null || v.isEmpty)
+                        ? 'Password is required.'
+                        : null,
                     prefixIcon: const Icon(Icons.lock_outline_rounded),
                     suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      icon: Icon(_obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -95,7 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
+                        MaterialPageRoute(
+                            builder: (_) => const ForgotPasswordScreen()),
                       ),
                       child: const Text('Forgot Password?'),
                     ),
@@ -129,7 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         variant: SolaceButtonVariant.outline,
                         icon: Icons.g_mobiledata_rounded,
                         isLoading: state is AuthLoading,
-                        onPressed: () => context.read<AuthBloc>().add(const GoogleSignInRequested()),
+                        onPressed: () => context
+                            .read<AuthBloc>()
+                            .add(const GoogleSignInRequested()),
                       );
                     },
                   ),
@@ -137,11 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't have an account? ", style: AppTextStyles.bodyMedium),
+                      Text("Don't have an account? ",
+                          style: AppTextStyles.bodyMedium),
                       GestureDetector(
                         onTap: widget.onSwitchToRegister ??
                             () => Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                                  MaterialPageRoute(
+                                      builder: (_) => const RegisterScreen()),
                                 ),
                         child: Text(
                           'Register',
