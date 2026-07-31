@@ -10,10 +10,7 @@ import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 import 'concern_selection_screen.dart';
 
-/// First screen after splash. Combines the welcome message, the privacy
-/// promise, and anonymous alias creation into a single screen — matching
-/// the Figma prototype, which puts all three on one frame rather than
-/// spreading them across separate onboarding pages.
+
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 

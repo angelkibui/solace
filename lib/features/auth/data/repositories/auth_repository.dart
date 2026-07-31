@@ -8,11 +8,7 @@ import '../../../../core/utils/failure.dart';
 import '../../../../core/utils/result.dart';
 import '../models/user_model.dart';
 
-/// Everything the app needs from Firebase Auth + the `users` collection in
-/// one place, so AuthBloc never touches FirebaseAuth/Firestore directly.
-/// Every public method returns a [Result] instead of throwing (see
-/// core/utils/result.dart) — the one exception is [authStateChanges],
-/// which is a stream AuthBloc subscribes to for auto-login (Part D12).
+
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
@@ -29,14 +25,11 @@ class AuthRepository {
   CollectionReference<Map<String, dynamic>> get _usersCollection =>
       _firestore.collection('users');
 
-  /// Fires on login, logout, and app relaunch with a cached session — the
-  /// single source of truth AuthBloc listens to for auto-login (D12).
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   User? get currentUser => _firebaseAuth.currentUser;
 
-  /// D2 — Email/password registration. Creates the Firebase Auth user,
-  /// kicks off email verification (D5), then writes the `users/{uid}` doc.
   Future<Result<UserModel>> registerWithEmail({
     required String email,
     required String password,
@@ -77,8 +70,6 @@ class AuthRepository {
     }
   }
 
-  /// D3 — Email/password login. Fetches (or, defensively, backfills) the
-  /// Firestore profile so AuthBloc always has a [UserModel] to emit.
   Future<Result<UserModel>> loginWithEmail(
       {required String email, required String password}) async {
     try {
@@ -100,10 +91,7 @@ class AuthRepository {
     }
   }
 
-  /// D4 — Google Sign-In. New users get a generated anonymous alias (same
-  /// style as WelcomeScreen's generator, Part C5) rather than their Google
-  /// display name — Solace's anonymity promise shouldn't quietly break
-  /// just because someone chose the Google button over email/password.
+
   Future<Result<UserModel>> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
@@ -135,7 +123,7 @@ class AuthRepository {
     }
   }
 
-  /// D5 — Resend the verification link (e.g. from a "Didn't get it?" link).
+ 
   Future<Result<void>> resendVerificationEmail() async {
     try {
       final user = _firebaseAuth.currentUser;
@@ -150,9 +138,7 @@ class AuthRepository {
     }
   }
 
-  /// D5 — Reloads the current user from Firebase and reports whether their
-  /// email is verified yet. Meant to be polled from a "I've verified" button
-  /// rather than a background timer, to avoid burning reads/quota.
+
   Future<bool> checkEmailVerified() async {
     final user = _firebaseAuth.currentUser;
     if (user == null) return false;
@@ -160,7 +146,7 @@ class AuthRepository {
     return _firebaseAuth.currentUser?.emailVerified ?? false;
   }
 
-  /// D6 — Forgot-password email.
+  /// Forgot-password email.
   Future<Result<void>> sendPasswordResetEmail(String email) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
@@ -170,9 +156,7 @@ class AuthRepository {
     }
   }
 
-  /// D13 — Signs out of both Firebase and Google (so a later "Sign in with
-  /// Google" tap prompts account selection again instead of silently
-  /// reusing the last session).
+
   Future<void> logout() async {
     await Future.wait([
       _firebaseAuth.signOut(),
@@ -180,9 +164,6 @@ class AuthRepository {
     ]);
   }
 
-  /// Used by AuthBloc's authStateChanges listener (D12) to resolve the
-  /// Firestore profile for whichever user Firebase reports — on fresh
-  /// login, or on auto-login when the app relaunches with a cached session.
   Future<UserModel?> getUserModel(String uid) async {
     final doc = await _usersCollection.doc(uid).get();
     if (!doc.exists || doc.data() == null) return null;

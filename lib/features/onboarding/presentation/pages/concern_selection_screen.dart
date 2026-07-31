@@ -10,9 +10,7 @@ import '../cubit/onboarding_cubit.dart';
 import '../cubit/onboarding_state.dart';
 import 'find_match_preview_screen.dart';
 
-/// "What's on your mind today?" — multi-select list of concern cards.
-/// Selections are tracked in OnboardingCubit and will drive Home's
-/// "Recommended for you" personalization once Part E is built.
+
 class ConcernSelectionScreen extends StatelessWidget {
   const ConcernSelectionScreen({super.key});
 

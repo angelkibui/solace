@@ -6,9 +6,7 @@ class OnboardingState extends Equatable {
   final Set<String> selectedConcerns;
   final OnboardingStatus status;
 
-  /// The anonymous alias picked/shuffled on WelcomeScreen (Part C5). Carried
-  /// through onboarding so Register (Part D10) can pre-fill it instead of
-  /// asking the user to make the same identity decision twice.
+
   final String? alias;
 
   const OnboardingState({
