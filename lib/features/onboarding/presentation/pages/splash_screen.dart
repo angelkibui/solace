@@ -16,14 +16,16 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 900));
     _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
     _controller.forward();
     _decideNextScreen();
@@ -43,7 +45,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => hasCompletedOnboarding ? const AuthGate() : const WelcomeScreen(),
+        builder: (_) =>
+            hasCompletedOnboarding ? const AuthGate() : const WelcomeScreen(),
       ),
     );
   }
@@ -67,15 +70,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               Container(
                 width: 96,
                 height: 96,
-                decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                child: const Icon(Icons.spa_rounded, color: AppColors.primary, size: 48),
+                decoration: const BoxDecoration(
+                    color: Colors.white, shape: BoxShape.circle),
+                child: const Icon(Icons.spa_rounded,
+                    color: AppColors.primary, size: 48),
               ),
               const SizedBox(height: 20),
-              Text('Solace', style: AppTextStyles.displayLarge.copyWith(color: Colors.white)),
+              Text('Solace',
+                  style:
+                      AppTextStyles.displayLarge.copyWith(color: Colors.white)),
               const SizedBox(height: 6),
               Text(
                 'A private space to feel better.',
-                style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.85)),
+                style: AppTextStyles.bodyMedium
+                    .copyWith(color: Colors.white.withValues(alpha: 0.85)),
               ),
             ],
           ),

@@ -4,7 +4,8 @@
 class Validators {
   Validators._();
 
-  static final RegExp _emailRegex = RegExp(r'^[\w.+-]+@[\w-]+\.[\w-]+(\.[\w-]+)*$');
+  static final RegExp _emailRegex =
+      RegExp(r'^[\w.+-]+@[\w-]+\.[\w-]+(\.[\w-]+)*$');
 
   /// Requires a plausible `name@domain.tld` shape. Deliberately permissive —
   /// full RFC 5322 validation isn't worth the false negatives here.
@@ -21,8 +22,10 @@ class Validators {
   static String? password(String? value) {
     if (value == null || value.isEmpty) return 'Password is required.';
     if (value.length < 8) return 'Password must be at least 8 characters.';
-    if (!RegExp(r'[A-Za-z]').hasMatch(value)) return 'Include at least one letter.';
-    if (!RegExp(r'[0-9]').hasMatch(value)) return 'Include at least one number.';
+    if (!RegExp(r'[A-Za-z]').hasMatch(value))
+      return 'Include at least one letter.';
+    if (!RegExp(r'[0-9]').hasMatch(value))
+      return 'Include at least one number.';
     return null;
   }
 

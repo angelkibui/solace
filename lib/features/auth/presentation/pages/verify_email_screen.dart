@@ -8,7 +8,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 
-/// verification status on demand 
+/// verification status on demand
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
 
@@ -32,10 +32,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final isVerified = state is AuthAuthenticated && state.emailVerified;
     if (!isVerified && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Not verified yet, check your inbox and try again.")),
+        const SnackBar(
+            content: Text("Not verified yet, check your inbox and try again.")),
       );
     }
-  
   }
 
   void _resend() {
@@ -55,9 +55,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.mark_email_unread_outlined, color: AppColors.primary, size: 64),
+              const Icon(Icons.mark_email_unread_outlined,
+                  color: AppColors.primary, size: 64),
               const SizedBox(height: 20),
-              Text('Verify your email', style: AppTextStyles.headingMedium, textAlign: TextAlign.center),
+              Text('Verify your email',
+                  style: AppTextStyles.headingMedium,
+                  textAlign: TextAlign.center),
               const SizedBox(height: 8),
               Text(
                 "We've sent a verification link to your email. Confirm it to unlock booking, "
@@ -79,7 +82,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               ),
               const SizedBox(height: 20),
               TextButton(
-                onPressed: () => context.read<AuthBloc>().add(const LogoutRequested()),
+                onPressed: () =>
+                    context.read<AuthBloc>().add(const LogoutRequested()),
                 child: const Text('Log out'),
               ),
             ],

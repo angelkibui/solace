@@ -39,14 +39,19 @@ class EmptyStateWidget extends StatelessWidget {
               child: Icon(icon, size: 40, color: AppColors.primary),
             ),
             const SizedBox(height: 20),
-            Text(title, style: AppTextStyles.headingSmall, textAlign: TextAlign.center),
+            Text(title,
+                style: AppTextStyles.headingSmall, textAlign: TextAlign.center),
             if (subtitle != null) ...[
               const SizedBox(height: 8),
-              Text(subtitle!, style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
+              Text(subtitle!,
+                  style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
             ],
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: 20),
-              SolaceButton(label: actionLabel!, variant: SolaceButtonVariant.outline, onPressed: onAction),
+              SolaceButton(
+                  label: actionLabel!,
+                  variant: SolaceButtonVariant.outline,
+                  onPressed: onAction),
             ],
           ],
         ),

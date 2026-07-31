@@ -20,7 +20,9 @@ class SessionTimer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       format(duration),
-      style: style ?? AppTextStyles.titleMedium.copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
+      style: style ??
+          AppTextStyles.titleMedium
+              .copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
     );
   }
 }
