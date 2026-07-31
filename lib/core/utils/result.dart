@@ -37,7 +37,8 @@ class ResultError<T> extends Result<T> {
 
 extension ResultX<T> on Result<T> {
   /// Collapses the result into a single value by handling both branches.
-  R fold<R>(R Function(Failure failure) onFailure, R Function(T data) onSuccess) {
+  R fold<R>(
+      R Function(Failure failure) onFailure, R Function(T data) onSuccess) {
     return switch (this) {
       Success<T>(data: final data) => onSuccess(data),
       ResultError<T>(failure: final failure) => onFailure(failure),

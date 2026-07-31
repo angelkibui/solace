@@ -26,7 +26,8 @@ class AuthRepository {
         _firestore = firestore ?? FirebaseFirestore.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn();
 
-  CollectionReference<Map<String, dynamic>> get _usersCollection => _firestore.collection('users');
+  CollectionReference<Map<String, dynamic>> get _usersCollection =>
+      _firestore.collection('users');
 
   /// Fires on login, logout, and app relaunch with a cached session — the
   /// single source of truth AuthBloc listens to for auto-login (D12).
@@ -47,7 +48,10 @@ class AuthRepository {
         password: password,
       );
       final user = credential.user;
-      if (user == null) return const ResultError(AuthFailure('Registration failed. Please try again.'));
+      if (user == null) {
+        return const ResultError(
+            AuthFailure('Registration failed. Please try again.'));
+      }
 
       await user.sendEmailVerification();
 
@@ -64,7 +68,8 @@ class AuthRepository {
     } on FirebaseAuthException catch (e) {
       return ResultError(AuthFailure(_messageForAuthCode(e.code)));
     } on FirebaseException catch (e) {
-      return ResultError(ServerFailure(e.message ?? 'Could not save your account. Please try again.'));
+      return ResultError(ServerFailure(
+          e.message ?? 'Could not save your account. Please try again.'));
     } catch (_) {
       return const ResultError(UnknownFailure());
     }
@@ -72,14 +77,18 @@ class AuthRepository {
 
   /// D3 — Email/password login. Fetches (or, defensively, backfills) the
   /// Firestore profile so AuthBloc always has a [UserModel] to emit.
-  Future<Result<UserModel>> loginWithEmail({required String email, required String password}) async {
+  Future<Result<UserModel>> loginWithEmail(
+      {required String email, required String password}) async {
     try {
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
       final user = credential.user;
-      if (user == null) return const ResultError(AuthFailure('Login failed. Please try again.'));
+      if (user == null) {
+        return const ResultError(
+            AuthFailure('Login failed. Please try again.'));
+      }
 
       return Success(await _fetchOrCreateUserDoc(user));
     } on FirebaseAuthException catch (e) {
@@ -106,15 +115,21 @@ class AuthRepository {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
       final user = userCredential.user;
-      if (user == null) return const ResultError(AuthFailure('Google sign-in failed. Please try again.'));
+      if (user == null) {
+        return const ResultError(
+            AuthFailure('Google sign-in failed. Please try again.'));
+      }
 
-      return Success(await _fetchOrCreateUserDoc(user, fallbackEmail: googleUser.email));
+      return Success(
+          await _fetchOrCreateUserDoc(user, fallbackEmail: googleUser.email));
     } on FirebaseAuthException catch (e) {
       return ResultError(AuthFailure(_messageForAuthCode(e.code)));
     } catch (_) {
-      return const ResultError(AuthFailure('Google sign-in failed. Please try again.'));
+      return const ResultError(
+          AuthFailure('Google sign-in failed. Please try again.'));
     }
   }
 
@@ -122,7 +137,10 @@ class AuthRepository {
   Future<Result<void>> resendVerificationEmail() async {
     try {
       final user = _firebaseAuth.currentUser;
-      if (user == null) return const ResultError(AuthFailure('You need to be signed in to do that.'));
+      if (user == null) {
+        return const ResultError(
+            AuthFailure('You need to be signed in to do that.'));
+      }
       await user.sendEmailVerification();
       return const Success(null);
     } on FirebaseAuthException catch (e) {
@@ -169,7 +187,8 @@ class AuthRepository {
     return UserModel.fromMap(doc.data()!, uid);
   }
 
-  Future<UserModel> _fetchOrCreateUserDoc(User user, {String? fallbackEmail}) async {
+  Future<UserModel> _fetchOrCreateUserDoc(User user,
+      {String? fallbackEmail}) async {
     final doc = await _usersCollection.doc(user.uid).get();
     if (doc.exists && doc.data() != null) {
       return UserModel.fromMap(doc.data()!, user.uid);
@@ -187,10 +206,28 @@ class AuthRepository {
   }
 
   static const _aliasAdjectives = [
-    'Quiet', 'Gentle', 'Calm', 'Brave', 'Wise', 'Kind', 'Steady', 'Bright', 'Warm', 'Bold',
+    'Quiet',
+    'Gentle',
+    'Calm',
+    'Brave',
+    'Wise',
+    'Kind',
+    'Steady',
+    'Bright',
+    'Warm',
+    'Bold',
   ];
   static const _aliasNouns = [
-    'Forest', 'River', 'Mountain', 'Ocean', 'Sky', 'Meadow', 'Harbor', 'Willow', 'Ember', 'Dawn',
+    'Forest',
+    'River',
+    'Mountain',
+    'Ocean',
+    'Sky',
+    'Meadow',
+    'Harbor',
+    'Willow',
+    'Ember',
+    'Dawn',
   ];
 
   String _generateFallbackAlias() {
@@ -206,11 +243,15 @@ class AuthRepository {
       'invalid-email' => 'That email address doesn\'t look right.',
       'user-disabled' => 'This account has been disabled.',
       'user-not-found' => 'No account found with that email.',
-      'wrong-password' || 'invalid-credential' => 'Incorrect email or password.',
+      'wrong-password' ||
+      'invalid-credential' =>
+        'Incorrect email or password.',
       'email-already-in-use' => 'An account already exists with that email.',
       'weak-password' => 'Please choose a stronger password.',
-      'too-many-requests' => 'Too many attempts. Please wait a moment and try again.',
-      'network-request-failed' => 'No internet connection. Check your network and try again.',
+      'too-many-requests' =>
+        'Too many attempts. Please wait a moment and try again.',
+      'network-request-failed' =>
+        'No internet connection. Check your network and try again.',
       _ => 'Something went wrong. Please try again.',
     };
   }

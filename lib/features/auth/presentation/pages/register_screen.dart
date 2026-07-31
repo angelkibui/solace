@@ -71,7 +71,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             if (state is AuthError) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: AppColors.error));
+                ..showSnackBar(SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: AppColors.error));
             }
           },
           child: SingleChildScrollView(
@@ -91,7 +93,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hint: 'Your anonymous display name',
                     controller: _aliasController,
                     validator: Validators.alias,
-                    prefixIcon: const Icon(Icons.face_retouching_natural_rounded),
+                    prefixIcon:
+                        const Icon(Icons.face_retouching_natural_rounded),
                   ),
                   const SizedBox(height: 16),
                   SolaceTextField(
@@ -111,8 +114,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     validator: Validators.password,
                     prefixIcon: const Icon(Icons.lock_outline_rounded),
                     suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                      icon: Icon(_obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -121,7 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     hint: 'Re-enter your password',
                     controller: _confirmPasswordController,
                     obscureText: _obscurePassword,
-                    validator: (v) => Validators.confirmPassword(v, _passwordController.text),
+                    validator: (v) =>
+                        Validators.confirmPassword(v, _passwordController.text),
                     prefixIcon: const Icon(Icons.lock_outline_rounded),
                   ),
                   const SizedBox(height: 20),
@@ -130,7 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Checkbox(
                         value: _agreedToTerms,
-                        onChanged: (v) => setState(() => _agreedToTerms = v ?? false),
+                        onChanged: (v) =>
+                            setState(() => _agreedToTerms = v ?? false),
                       ),
                       Expanded(
                         child: Padding(
@@ -148,7 +156,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       padding: const EdgeInsets.only(left: 12, bottom: 8),
                       child: Text(
                         'Please accept the terms to continue.',
-                        style: AppTextStyles.caption.copyWith(color: AppColors.error),
+                        style: AppTextStyles.caption
+                            .copyWith(color: AppColors.error),
                       ),
                     ),
                   const SizedBox(height: 12),
@@ -165,11 +174,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Already have an account? ', style: AppTextStyles.bodyMedium),
+                      Text('Already have an account? ',
+                          style: AppTextStyles.bodyMedium),
                       GestureDetector(
                         onTap: widget.onSwitchToLogin ??
                             () => Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                                  MaterialPageRoute(
+                                      builder: (_) => const LoginScreen()),
                                 ),
                         child: Text(
                           'Log In',

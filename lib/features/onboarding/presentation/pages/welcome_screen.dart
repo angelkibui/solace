@@ -22,10 +22,28 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   static const _adjectives = [
-    'Quiet', 'Gentle', 'Calm', 'Brave', 'Wise', 'Kind', 'Steady', 'Bright', 'Warm', 'Bold',
+    'Quiet',
+    'Gentle',
+    'Calm',
+    'Brave',
+    'Wise',
+    'Kind',
+    'Steady',
+    'Bright',
+    'Warm',
+    'Bold',
   ];
   static const _nouns = [
-    'Forest', 'River', 'Mountain', 'Ocean', 'Sky', 'Meadow', 'Harbor', 'Willow', 'Ember', 'Dawn',
+    'Forest',
+    'River',
+    'Mountain',
+    'Ocean',
+    'Sky',
+    'Meadow',
+    'Harbor',
+    'Willow',
+    'Ember',
+    'Dawn',
   ];
 
   final _random = Random();
@@ -44,7 +62,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String _generateAlias() {
     final adjective = _adjectives[_random.nextInt(_adjectives.length)];
     final noun = _nouns[_random.nextInt(_nouns.length)];
-    final number = _random.nextInt(90000) + 10000; // 5-digit suffix, matches Figma's "BornASaint69767" style
+    final number = _random.nextInt(90000) +
+        10000; // 5-digit suffix, matches Figma's "BornASaint69767" style
     return '$adjective$noun$number';
   }
 
@@ -77,16 +96,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [AppColors.info.withValues(alpha: 0.9), AppColors.primary.withValues(alpha: 0.9)],
+                      colors: [
+                        AppColors.info.withValues(alpha: 0.9),
+                        AppColors.primary.withValues(alpha: 0.9)
+                      ],
                     ),
                   ),
-                  child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 40),
+                  child: const Icon(Icons.favorite_rounded,
+                      color: Colors.white, size: 40),
                 ),
               ),
               const SizedBox(height: 20),
-              Text('Welcome to\nSolace', style: AppTextStyles.headingLarge, textAlign: TextAlign.center),
+              Text('Welcome to\nSolace',
+                  style: AppTextStyles.headingLarge,
+                  textAlign: TextAlign.center),
               const SizedBox(height: 10),
-              Text(AppConstants.appTagline, style: AppTextStyles.bodyLarge, textAlign: TextAlign.center),
+              Text(AppConstants.appTagline,
+                  style: AppTextStyles.bodyLarge, textAlign: TextAlign.center),
               const SizedBox(height: 28),
 
               // Privacy First card
@@ -95,22 +121,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+                  border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                      child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 20),
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      child: const Icon(Icons.shield_outlined,
+                          color: AppColors.primary, size: 20),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Privacy First', style: AppTextStyles.titleMedium),
+                          Text('Privacy First',
+                              style: AppTextStyles.titleMedium),
                           const SizedBox(height: 3),
                           Text(
                             'Get help without fear, judgment, or anyone else knowing. '
@@ -129,7 +159,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Text('Your Anonymous Alias', style: AppTextStyles.titleMedium),
               const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(14),
@@ -140,7 +171,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Expanded(
                       child: Text(
                         _alias,
-                        style: AppTextStyles.titleMedium.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700),
+                        style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                     InkWell(
@@ -148,7 +181,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       borderRadius: BorderRadius.circular(20),
                       child: const Padding(
                         padding: EdgeInsets.all(4),
-                        child: Icon(Icons.refresh_rounded, color: AppColors.textSecondary),
+                        child: Icon(Icons.refresh_rounded,
+                            color: AppColors.textSecondary),
                       ),
                     ),
                   ],
@@ -167,7 +201,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(AppConstants.presenceColors.length, (index) {
+                children:
+                    List.generate(AppConstants.presenceColors.length, (index) {
                   final color = AppConstants.presenceColors[index];
                   final isSelected = _selectedPresenceIndex == index;
                   return GestureDetector(
@@ -180,11 +215,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         color: color,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isSelected ? AppColors.navy : Colors.transparent,
+                          color:
+                              isSelected ? AppColors.navy : Colors.transparent,
                           width: 2.5,
                         ),
                       ),
-                      child: isSelected ? const Icon(Icons.check_rounded, color: Colors.white, size: 20) : null,
+                      child: isSelected
+                          ? const Icon(Icons.check_rounded,
+                              color: Colors.white, size: 20)
+                          : null,
                     ),
                   );
                 }),
@@ -193,7 +232,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
               SolaceButton(
                 label: 'Get Started',
-                variant: SolaceButtonVariant.secondary, // navy hero CTA, matches Figma
+                variant: SolaceButtonVariant
+                    .secondary, // navy hero CTA, matches Figma
                 icon: Icons.arrow_forward_rounded,
                 onPressed: _handleGetStarted,
               ),
@@ -206,11 +246,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     const TextSpan(text: 'By continuing, you agree to our '),
                     TextSpan(
                       text: 'Safety Guidelines',
-                      style: const TextStyle(decoration: TextDecoration.underline, color: AppColors.textPrimary),
+                      style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: AppColors.textPrimary),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Safety Guidelines page coming soon.')),
-                            ),
+                        ..onTap =
+                            () => ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Safety Guidelines page coming soon.')),
+                                ),
                     ),
                   ],
                 ),

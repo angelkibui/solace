@@ -74,29 +74,47 @@ class TherapistDetailScreen extends StatelessWidget {
               ),
               child: SafeArea(
                 top: false,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('Session rate', style: AppTextStyles.caption),
-                          Text(
-                            '${NumberFormat.decimalPattern().format(therapist.rate)} RWF / hr',
-                            style: AppTextStyles.titleMedium.copyWith(
-                              color: AppColors.primary,
-                            ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final rate = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Session rate', style: AppTextStyles.caption),
+                        Text(
+                          '${NumberFormat.decimalPattern().format(therapist.rate)} RWF / hr',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: AppColors.primary,
                           ),
-                        ],
-                      ),
-                    ),
-                    SolaceButton(
-                      label: 'Book Consultation',
+                        ),
+                      ],
+                    );
+                    final bookButton = SolaceButton(
+                      label: constraints.maxWidth < 420
+                          ? 'Book Session'
+                          : 'Book Consultation',
                       icon: Icons.calendar_month_rounded,
+                      width:
+                          constraints.maxWidth < 420 ? double.infinity : null,
                       onPressed: onBook,
-                    ),
-                  ],
+                    );
+                    if (constraints.maxWidth < 420) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          rate,
+                          const SizedBox(height: 10),
+                          bookButton,
+                        ],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        Expanded(child: rate),
+                        bookButton,
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
@@ -168,10 +186,12 @@ class _ProfileHero extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Row(
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     StarRating(rating: therapist.rating, size: 18),
-                    const SizedBox(width: 6),
                     Text(
                       '${therapist.rating.toStringAsFixed(1)} · ${therapist.reviewCount} reviews',
                       style: AppTextStyles.bodySmall,
