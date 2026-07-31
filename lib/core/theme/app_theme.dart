@@ -21,7 +21,10 @@ class AppTheme {
         surface: AppColors.surface,
       ),
       dividerColor: AppColors.divider,
-      textTheme: _textTheme(AppColors.textPrimary),
+      textTheme: _textTheme(
+        AppColors.textPrimary,
+        AppColors.textSecondary,
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,
@@ -116,7 +119,10 @@ class AppTheme {
         surface: AppColors.darkSurface,
       ),
       dividerColor: AppColors.darkDivider,
-      textTheme: _textTheme(AppColors.darkTextPrimary),
+      textTheme: _textTheme(
+        AppColors.darkTextPrimary,
+        AppColors.darkTextSecondary,
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.darkBackground,
         foregroundColor: AppColors.darkTextPrimary,
@@ -169,7 +175,7 @@ class AppTheme {
     );
   }
 
-  static TextTheme _textTheme(Color color) {
+  static TextTheme _textTheme(Color color, Color secondaryColor) {
     return TextTheme(
       displayLarge: AppTextStyles.displayLarge.copyWith(color: color),
       headlineLarge: AppTextStyles.headingLarge.copyWith(color: color),
@@ -178,8 +184,8 @@ class AppTheme {
       titleMedium: AppTextStyles.titleMedium.copyWith(color: color),
       bodyLarge: AppTextStyles.bodyLarge.copyWith(color: color),
       bodyMedium: AppTextStyles.bodyMedium.copyWith(color: color),
-      bodySmall: AppTextStyles.bodySmall,
-      labelSmall: AppTextStyles.caption,
+      bodySmall: AppTextStyles.bodySmall.copyWith(color: secondaryColor),
+      labelSmall: AppTextStyles.caption.copyWith(color: secondaryColor),
     );
   }
 }
