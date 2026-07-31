@@ -25,7 +25,9 @@ class ConcernSelectionScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.search_rounded),
             onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Search arrives with the Therapist Directory (Part F).')),
+              const SnackBar(
+                  content: Text(
+                      'Search arrives with the Therapist Directory (Part F).')),
             ),
           ),
         ],
@@ -39,7 +41,8 @@ class ConcernSelectionScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('What\'s on your mind today?', style: AppTextStyles.headingLarge),
+                  Text('What\'s on your mind today?',
+                      style: AppTextStyles.headingLarge),
                   const SizedBox(height: 8),
                   Text(
                     'Select all that apply. This helps us tailor your experience and '
@@ -60,8 +63,11 @@ class ConcernSelectionScreen extends StatelessWidget {
                       return ConcernListTile(
                         concern: concern,
                         tintIndex: index,
-                        isSelected: state.selectedConcerns.contains(concern.title),
-                        onTap: () => context.read<OnboardingCubit>().toggleConcern(concern.title),
+                        isSelected:
+                            state.selectedConcerns.contains(concern.title),
+                        onTap: () => context
+                            .read<OnboardingCubit>()
+                            .toggleConcern(concern.title),
                       );
                     },
                   );
@@ -79,7 +85,8 @@ class ConcernSelectionScreen extends StatelessWidget {
                 child: SolaceButton(
                   label: 'Continue',
                   onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const FindMatchPreviewScreen()),
+                    MaterialPageRoute(
+                        builder: (_) => const FindMatchPreviewScreen()),
                   ),
                 ),
               ),

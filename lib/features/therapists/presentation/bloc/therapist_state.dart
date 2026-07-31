@@ -28,15 +28,13 @@ class TherapistState extends Equatable {
   List<TherapistModel> get visibleTherapists {
     final normalizedQuery = query.trim().toLowerCase();
     return therapists.where((therapist) {
-      final matchesQuery =
-          normalizedQuery.isEmpty ||
+      final matchesQuery = normalizedQuery.isEmpty ||
           therapist.name.toLowerCase().contains(normalizedQuery) ||
           therapist.title.toLowerCase().contains(normalizedQuery) ||
           therapist.specialties.any(
             (value) => value.toLowerCase().contains(normalizedQuery),
           );
-      final matchesSpecialty =
-          specialty == null ||
+      final matchesSpecialty = specialty == null ||
           therapist.specialties.contains(specialty) ||
           therapist.title == specialty;
       final matchesLanguage =
@@ -86,13 +84,13 @@ class TherapistState extends Equatable {
 
   @override
   List<Object?> get props => [
-    status,
-    therapists,
-    query,
-    specialty,
-    language,
-    gender,
-    maximumRate,
-    errorMessage,
-  ];
+        status,
+        therapists,
+        query,
+        specialty,
+        language,
+        gender,
+        maximumRate,
+        errorMessage,
+      ];
 }

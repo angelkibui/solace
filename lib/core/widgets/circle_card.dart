@@ -45,9 +45,11 @@ class CircleCard extends StatelessWidget {
                   child: imageUrl == null
                       ? Container(
                           color: AppColors.primary.withValues(alpha: 0.12),
-                          child: const Icon(Icons.groups_rounded, color: AppColors.primary, size: 32),
+                          child: const Icon(Icons.groups_rounded,
+                              color: AppColors.primary, size: 32),
                         )
-                      : CachedNetworkImage(imageUrl: imageUrl!, fit: BoxFit.cover),
+                      : CachedNetworkImage(
+                          imageUrl: imageUrl!, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(height: 10),
@@ -62,13 +64,16 @@ class CircleCard extends StatelessWidget {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  const Icon(Icons.people_alt_outlined, size: 15, color: AppColors.textSecondary),
+                  const Icon(Icons.people_alt_outlined,
+                      size: 15, color: AppColors.textSecondary),
                   const SizedBox(width: 4),
                   Text('$memberCount members', style: AppTextStyles.caption),
                   const Spacer(),
                   SolaceButton(
                     label: isJoined ? 'Leave' : 'Join',
-                    variant: isJoined ? SolaceButtonVariant.outline : SolaceButtonVariant.primary,
+                    variant: isJoined
+                        ? SolaceButtonVariant.outline
+                        : SolaceButtonVariant.primary,
                     height: 32,
                     onPressed: onJoinToggle,
                   ),

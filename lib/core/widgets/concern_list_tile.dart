@@ -49,7 +49,8 @@ class ConcernListTile extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: BoxDecoration(color: tint[0], borderRadius: BorderRadius.circular(14)),
+                  decoration: BoxDecoration(
+                      color: tint[0], borderRadius: BorderRadius.circular(14)),
                   child: Icon(concern.icon, color: tint[1], size: 24),
                 ),
                 const SizedBox(width: 14),
@@ -71,9 +72,15 @@ class ConcernListTile extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: isSelected ? AppColors.primary : Colors.transparent,
-                    border: Border.all(color: isSelected ? AppColors.primary : AppColors.divider, width: 1.4),
+                    border: Border.all(
+                        color:
+                            isSelected ? AppColors.primary : AppColors.divider,
+                        width: 1.4),
                   ),
-                  child: isSelected ? const Icon(Icons.check_rounded, size: 16, color: Colors.white) : null,
+                  child: isSelected
+                      ? const Icon(Icons.check_rounded,
+                          size: 16, color: Colors.white)
+                      : null,
                 ),
               ],
             ),

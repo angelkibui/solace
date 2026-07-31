@@ -38,7 +38,9 @@ class CustomBottomNavBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkSurface : AppColors.surface,
-        border: Border(top: BorderSide(color: isDark ? AppColors.darkDivider : AppColors.divider)),
+        border: Border(
+            top: BorderSide(
+                color: isDark ? AppColors.darkDivider : AppColors.divider)),
       ),
       child: SafeArea(
         top: false,
@@ -53,7 +55,8 @@ class CustomBottomNavBar extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
-                padding: EdgeInsets.symmetric(horizontal: isActive ? 16 : 10, vertical: 8),
+                padding: EdgeInsets.symmetric(
+                    horizontal: isActive ? 16 : 10, vertical: 8),
                 decoration: BoxDecoration(
                   color: isActive ? AppColors.primary : Colors.transparent,
                   borderRadius: BorderRadius.circular(24),
@@ -70,7 +73,8 @@ class CustomBottomNavBar extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         item.label,
-                        style: AppTextStyles.caption.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                        style: AppTextStyles.caption.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ],

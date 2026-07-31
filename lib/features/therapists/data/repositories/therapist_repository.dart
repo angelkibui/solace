@@ -8,16 +8,15 @@ class TherapistRepository {
   final FirebaseFirestore _firestore;
 
   TherapistRepository({FirebaseFirestore? firestore})
-    : _firestore = firestore ?? FirebaseFirestore.instance;
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   CollectionReference<Map<String, dynamic>> get _collection =>
       _firestore.collection('therapists');
 
   Future<Result<List<TherapistModel>>> getTherapists() async {
     try {
-      final snapshot = await _collection
-          .orderBy('rating', descending: true)
-          .get();
+      final snapshot =
+          await _collection.orderBy('rating', descending: true).get();
       return Success(snapshot.docs.map(TherapistModel.fromFirestore).toList());
     } on FirebaseException catch (error) {
       return ResultError(

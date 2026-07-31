@@ -31,7 +31,8 @@ class RegisterRequested extends AuthEvent {
   final String alias;
   final String email;
   final String password;
-  const RegisterRequested({required this.alias, required this.email, required this.password});
+  const RegisterRequested(
+      {required this.alias, required this.email, required this.password});
 
   @override
   List<Object?> get props => [alias, email, password];
