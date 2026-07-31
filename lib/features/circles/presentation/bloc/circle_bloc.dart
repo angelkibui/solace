@@ -80,9 +80,7 @@ class CircleBloc extends Bloc<CircleEvent, CircleState> {
 
     switch (result) {
       case Success():
-        // Update the local copy to match what the write just did, rather
-        // than re-fetching the whole list -- keeps the join/leave feeling
-        // instant instead of waiting on a second round-trip.
+     
         final updatedMemberIds = isJoined
             ? (List<String>.from(circle.memberIds)..remove(state.userId))
             : [...circle.memberIds, state.userId];

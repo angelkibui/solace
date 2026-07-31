@@ -128,11 +128,7 @@ class _CirclesHeader extends StatelessWidget {
   }
 }
 
-/// I2 — "All Circles" / "My Circles" tabs. A plain Row of two ChoiceChip-
-/// styled buttons rather than a Material TabBar, since there's no
-/// TabController/TabBarView pagination need here — CircleBloc's
-/// myCirclesOnly flag already drives which circles show through
-/// visibleCircles, so switching tabs is just one field changing.
+
 class _TabSelector extends StatelessWidget {
   const _TabSelector();
 
@@ -214,9 +210,6 @@ class _TabButton extends StatelessWidget {
   }
 }
 
-/// I3 — category chips, populated from whatever categories are actually
-/// present in the loaded circles rather than a hardcoded list, so this
-/// never drifts out of sync with real data the way a fixed list could.
 class _CategoryChips extends StatelessWidget {
   const _CategoryChips();
 

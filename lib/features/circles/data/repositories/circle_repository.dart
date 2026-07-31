@@ -52,11 +52,6 @@ class CircleRepository {
     }
   }
 
-  /// Adds [userId] to memberIds and increments memberCount atomically, in
-  /// one write -- avoids a read-modify-write race if two people join the
-  /// same circle at the same moment. Mirrors what firestore.rules'
-  /// `circles` update rule expects (memberIds/memberCount are the only
-  /// fields this is allowed to touch).
   Future<Result<void>> joinCircle(String circleId, String userId) async {
     try {
       await _collection.doc(circleId).update({

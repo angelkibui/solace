@@ -10,10 +10,6 @@ import '../bloc/circle_bloc.dart';
 import '../bloc/circle_event.dart';
 import '../bloc/circle_state.dart';
 
-/// Reads the circle by [circleId] out of CircleBloc's own state (via
-/// BlocProvider.value from CirclesListScreen) rather than taking a
-/// CircleModel directly, so joining/leaving from this screen reflects
-/// immediately without a separate round-trip or a stale copy passed in.
 class CircleDetailScreen extends StatelessWidget {
   final String circleId;
 

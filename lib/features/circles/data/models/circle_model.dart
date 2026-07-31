@@ -12,13 +12,6 @@ class CircleModel extends Equatable {
   final DateTime createdAt;
   final String imageUrl;
 
-  /// UIDs of members who have joined. Not itemized in the task sheet's
-  /// field list (I1), but needed to actually implement "My Circles" (I8)
-  /// and join/leave (I5) without a second collection — [memberCount] is
-  /// kept as its own field (rather than derived via memberIds.length) so
-  /// it can be shown without reading/counting the array client-side, same
-  /// as TherapistModel keeps reviewCount separate from the reviews
-  /// themselves.
   final List<String> memberIds;
 
   const CircleModel({
