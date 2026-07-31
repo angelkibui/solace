@@ -6,6 +6,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/solace_button.dart';
+import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 import 'concern_selection_screen.dart';
 
@@ -75,6 +76,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void _handleGetStarted() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const ConcernSelectionScreen()),
+    );
+  }
+
+  /// Onboarding (alias, concerns, find-match preview) is only meant for
+  /// someone setting up Solace for the first time — forcing a returning
+  /// user, or anyone reinstalling/testing, through all three screens
+  /// before they can even reach Login was a genuine gap. This skips
+  /// straight to AuthGate's Login branch instead, same as SplashScreen
+  /// does for a device that's already completed onboarding.
+  void _handleAlreadyHaveAccount() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const AuthGate()),
+      (route) => false,
     );
   }
 
@@ -237,7 +251,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 icon: Icons.arrow_forward_rounded,
                 onPressed: _handleGetStarted,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+
+              Center(
+                child: TextButton(
+                  onPressed: _handleAlreadyHaveAccount,
+                  child: Text.rich(
+                    TextSpan(
+                      style: AppTextStyles.bodyMedium
+                          .copyWith(color: AppColors.textSecondary),
+                      children: [
+                        const TextSpan(text: 'Already have an account? '),
+                        TextSpan(
+                          text: 'Log in',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
 
               Text.rich(
                 TextSpan(
