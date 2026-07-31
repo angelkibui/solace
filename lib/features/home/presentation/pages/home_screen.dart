@@ -102,12 +102,12 @@ class _HomeScreenState extends State<HomeScreen> {
               BlocBuilder<HomeBloc, HomeState>(
                 builder: (context, state) {
                   return switch (state) {
-                    HomeInitial() || HomeLoading() => Column(
+                    HomeInitial() || HomeLoading() => const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _SectionHeader(title: 'Recommended for you', onSeeAll: null),
-                          const SizedBox(height: 12),
-                          const SizedBox(height: 160, child: LoadingShimmer(itemCount: 2, itemHeight: 160)),
+                          SizedBox(height: 12),
+                          SizedBox(height: 160, child: LoadingShimmer(itemCount: 2, itemHeight: 160)),
                         ],
                       ),
                     HomeError(:final message) => Padding(

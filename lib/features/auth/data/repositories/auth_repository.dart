@@ -170,6 +170,29 @@ class AuthRepository {
     return UserModel.fromMap(doc.data()!, uid);
   }
 
+  /// Updates the user's alias and/or preferences in Firestore.
+  Future<Result<UserModel>> updateProfile({
+    required String uid,
+    required String alias,
+    required List<String> preferences,
+  }) async {
+    try {
+      await _usersCollection.doc(uid).update({
+        'alias': alias.trim(),
+        'preferences': preferences,
+      });
+      final updated = await getUserModel(uid);
+      if (updated == null) {
+        return const ResultError(ServerFailure('Could not reload your profile.'));
+      }
+      return Success(updated);
+    } on FirebaseException catch (e) {
+      return ResultError(ServerFailure(e.message ?? 'Could not save your profile.'));
+    } catch (_) {
+      return const ResultError(UnknownFailure());
+    }
+  }
+
   Future<UserModel> _fetchOrCreateUserDoc(User user,
       {String? fallbackEmail}) async {
     final doc = await _usersCollection.doc(user.uid).get();

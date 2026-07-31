@@ -11,11 +11,13 @@ import '../../../appointments/presentation/pages/booking_flow_screen.dart';
 import '../../../appointments/presentation/pages/my_appointments_screen.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../chat/presentation/pages/chat_hub_screen.dart';
 import '../../../payments/data/repositories/payment_repository.dart';
 import '../../../payments/presentation/bloc/payment_bloc.dart';
 import '../../../payments/presentation/bloc/payment_event.dart';
 import '../../../payments/presentation/pages/payment_checkout_screen.dart';
 import '../../../payments/presentation/pages/transaction_history_screen.dart';
+import '../../../profile/presentation/pages/profile_screen.dart';
 import '../../../therapists/data/models/therapist_model.dart';
 import '../../../therapists/data/repositories/therapist_repository.dart';
 import '../../../therapists/presentation/bloc/therapist_bloc.dart';
@@ -77,16 +79,8 @@ class _MainShellState extends State<MainShell> {
                 icon: Icons.groups_rounded,
                 partLabel: 'Part I (Community Circles)',
               ),
-              const ComingSoonTab(
-                title: 'Chat',
-                icon: Icons.chat_bubble_rounded,
-                partLabel: 'Part J (Real-Time Chat)',
-              ),
-              const ComingSoonTab(
-                title: 'Profile',
-                icon: Icons.person_rounded,
-                partLabel: 'Part M (Profile & Settings)',
-              ),
+              const ChatHubScreen(),
+              const ProfileScreen(),
             ],
           ),
           bottomNavigationBar: CustomBottomNavBar(

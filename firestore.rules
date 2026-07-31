@@ -56,5 +56,16 @@ service cloud.firestore {
         && request.resource.data.amount == resource.data.amount;
       allow delete: if isOwner(resource.data.userId);
     }
+
+    // chats/{chatId}/messages/{messageId}
+    // chatId is "{sortedUidA}_{sortedUidB}" — both participants can read/write.
+    match /chats/{chatId}/messages/{messageId} {
+      allow read, create: if signedIn()
+        && chatId.matches('.*' + request.auth.uid + '.*');
+      allow update: if signedIn()
+        && chatId.matches('.*' + request.auth.uid + '.*')
+        && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['isRead']);
+    }
   }
 }
