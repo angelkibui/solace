@@ -54,7 +54,8 @@ void main() {
       build: () => CircleBloc(repository, userId: 'uid-1'),
       act: (bloc) => bloc.add(const CirclesRequested()),
       expect: () => [
-        isA<CircleState>().having((s) => s.status, 'status', CircleStatus.loading),
+        isA<CircleState>()
+            .having((s) => s.status, 'status', CircleStatus.loading),
         isA<CircleState>()
             .having((s) => s.status, 'status', CircleStatus.success)
             .having((s) => s.circles.length, 'circles.length', 2),
@@ -64,13 +65,14 @@ void main() {
     blocTest<CircleBloc, CircleState>(
       'emits [loading, failure] when the repository call fails',
       setUp: () {
-        when(() => repository.getCircles())
-            .thenAnswer((_) async => const ResultError(ServerFailure('Network error.')));
+        when(() => repository.getCircles()).thenAnswer(
+            (_) async => const ResultError(ServerFailure('Network error.')));
       },
       build: () => CircleBloc(repository, userId: 'uid-1'),
       act: (bloc) => bloc.add(const CirclesRequested()),
       expect: () => [
-        isA<CircleState>().having((s) => s.status, 'status', CircleStatus.loading),
+        isA<CircleState>()
+            .having((s) => s.status, 'status', CircleStatus.loading),
         isA<CircleState>()
             .having((s) => s.status, 'status', CircleStatus.failure)
             .having((s) => s.errorMessage, 'errorMessage', 'Network error.'),
