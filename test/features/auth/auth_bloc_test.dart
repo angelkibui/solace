@@ -144,4 +144,65 @@ void main() {
       expect: () => [AuthAuthenticated(testUser, emailVerified: true)],
     );
   });
+
+  group('ProfileUpdateRequested', () {
+    final updatedUser = testUser.copyWith(
+      alias: 'CalmForest',
+      preferences: const ['Anxiety'],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'keeps the authenticated shell active while saving',
+      setUp: () {
+        when(() => authRepository.updateProfile(
+              alias: 'CalmForest',
+              preferences: const ['Anxiety'],
+            )).thenAnswer((_) async => Success(updatedUser));
+      },
+      build: () => AuthBloc(authRepository),
+      seed: () => AuthAuthenticated(testUser, emailVerified: true),
+      act: (bloc) => bloc.add(const ProfileUpdateRequested(
+        alias: 'CalmForest',
+        preferences: ['Anxiety'],
+      )),
+      expect: () => [
+        AuthAuthenticated(
+          testUser,
+          emailVerified: true,
+          isUpdatingProfile: true,
+        ),
+        AuthAuthenticated(updatedUser, emailVerified: true),
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'keeps the prior profile and exposes a scoped save error',
+      setUp: () {
+        when(() => authRepository.updateProfile(
+                  alias: any(named: 'alias'),
+                  preferences: any(named: 'preferences'),
+                ))
+            .thenAnswer((_) async =>
+                const ResultError(ServerFailure('Could not save profile.')));
+      },
+      build: () => AuthBloc(authRepository),
+      seed: () => AuthAuthenticated(testUser, emailVerified: true),
+      act: (bloc) => bloc.add(const ProfileUpdateRequested(
+        alias: 'CalmForest',
+        preferences: ['Anxiety'],
+      )),
+      expect: () => [
+        AuthAuthenticated(
+          testUser,
+          emailVerified: true,
+          isUpdatingProfile: true,
+        ),
+        AuthAuthenticated(
+          testUser,
+          emailVerified: true,
+          profileErrorMessage: 'Could not save profile.',
+        ),
+      ],
+    );
+  });
 }
