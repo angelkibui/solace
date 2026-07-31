@@ -21,7 +21,7 @@ class MessageModel extends Equatable {
   });
 
   factory MessageModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final data = doc.data()!;
+    final data = doc.data() ?? const <String, dynamic>{};
     return MessageModel(
       id: doc.id,
       senderId: data['senderId'] as String? ?? '',
@@ -43,5 +43,12 @@ class MessageModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, senderId, text, createdAt, isRead];
+  List<Object?> get props => [
+        id,
+        senderId,
+        senderAlias,
+        text,
+        createdAt,
+        isRead,
+      ];
 }

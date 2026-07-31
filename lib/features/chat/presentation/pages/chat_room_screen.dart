@@ -16,6 +16,8 @@ class ChatRoomScreen extends StatefulWidget {
   final String chatId;
   final String currentUserId;
   final String currentUserAlias;
+  final String therapistId;
+  final String providerUid;
   final String therapistName;
 
   const ChatRoomScreen({
@@ -23,6 +25,8 @@ class ChatRoomScreen extends StatefulWidget {
     required this.chatId,
     required this.currentUserId,
     required this.currentUserAlias,
+    required this.therapistId,
+    required this.providerUid,
     required this.therapistName,
   });
 
@@ -33,15 +37,24 @@ class ChatRoomScreen extends StatefulWidget {
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  String? _pendingText;
+  String? _shownError;
 
   @override
   void initState() {
     super.initState();
-    context.read<ChatBloc>().add(ChatStarted(
+    _startChat();
+  }
+
+  void _startChat() => context.read<ChatBloc>().add(
+        ChatStarted(
           chatId: widget.chatId,
           currentUserId: widget.currentUserId,
-        ));
-  }
+          currentUserAlias: widget.currentUserAlias,
+          therapistId: widget.therapistId,
+          providerUid: widget.providerUid,
+        ),
+      );
 
   @override
   void dispose() {
@@ -51,16 +64,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 
   void _sendMessage() {
+    final state = context.read<ChatBloc>().state;
+    if (state is! ChatLoaded || state.isSending) return;
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    context.read<ChatBloc>().add(ChatMessageSent(
-          chatId: widget.chatId,
-          senderId: widget.currentUserId,
-          senderAlias: widget.currentUserAlias,
-          text: text,
-        ));
-    _controller.clear();
-    _scrollToBottom();
+    if (text.isEmpty || text.length > 2000) return;
+    _pendingText = text;
+    context.read<ChatBloc>().add(ChatMessageSent(text));
   }
 
   void _scrollToBottom() {
@@ -110,6 +119,24 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         listener: (context, state) {
           if (state is ChatLoaded) {
             _scrollToBottom();
+            final error = state.errorMessage;
+            if (_pendingText != null && !state.isSending) {
+              if (error == null && _controller.text.trim() == _pendingText) {
+                _controller.clear();
+              }
+              _pendingText = null;
+            }
+            if (error == null) {
+              _shownError = null;
+            } else if (error != _shownError) {
+              _shownError = error;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(error),
+                  backgroundColor: AppColors.error,
+                ),
+              );
+            }
           }
           if (state is ChatError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -187,6 +214,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       );
     }
 
+    if (state is ChatError) {
+      return EmptyStateWidget(
+        icon: Icons.cloud_off_rounded,
+        title: 'Conversation unavailable',
+        subtitle: state.message,
+        actionLabel: 'Try again',
+        onAction: _startChat,
+      );
+    }
+
     // ChatInitial / ChatError — show nothing in the list area
     return const SizedBox.shrink();
   }
@@ -212,14 +249,12 @@ class _AnonymityBanner extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const Icon(Icons.shield_outlined,
-              size: 16, color: AppColors.primary),
+          const Icon(Icons.shield_outlined, size: 16, color: AppColors.primary),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Chatting as "$alias". Your identity is private.',
-              style: AppTextStyles.caption
-                  .copyWith(color: AppColors.primary),
+              'Chatting as "$alias". Your alias is shown in this conversation.',
+              style: AppTextStyles.caption.copyWith(color: AppColors.primary),
             ),
           ),
         ],
@@ -235,13 +270,12 @@ class _DateSeparator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final label = date.year == now.year &&
-            date.month == now.month &&
-            date.day == now.day
+    final today = DateTime(now.year, now.month, now.day);
+    final messageDay = DateTime(date.year, date.month, date.day);
+    final daysAgo = today.difference(messageDay).inDays;
+    final label = daysAgo == 0
         ? 'Today'
-        : date.year == now.year &&
-                date.month == now.month &&
-                date.day == now.day - 1
+        : daysAgo == 1
             ? 'Yesterday'
             : '${date.day}/${date.month}/${date.year}';
 
@@ -297,20 +331,22 @@ class _MessageInputBar extends StatelessWidget {
             Expanded(
               child: TextField(
                 controller: controller,
+                enabled: !isSending,
                 minLines: 1,
                 maxLines: 5,
+                maxLength: 2000,
                 textCapitalization: TextCapitalization.sentences,
                 style: AppTextStyles.bodyMedium,
                 decoration: InputDecoration(
                   hintText: 'Type a message…',
+                  counterText: '',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: isDark
-                      ? AppColors.darkBackground
-                      : AppColors.background,
+                  fillColor:
+                      isDark ? AppColors.darkBackground : AppColors.background,
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 ),

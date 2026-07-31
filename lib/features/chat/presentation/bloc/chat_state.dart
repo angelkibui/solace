@@ -19,17 +19,28 @@ class ChatLoading extends ChatState {
 class ChatLoaded extends ChatState {
   final List<MessageModel> messages;
   final bool isSending;
+  final String? errorMessage;
 
-  const ChatLoaded({required this.messages, this.isSending = false});
+  const ChatLoaded({
+    required this.messages,
+    this.isSending = false,
+    this.errorMessage,
+  });
 
-  ChatLoaded copyWith({List<MessageModel>? messages, bool? isSending}) =>
+  ChatLoaded copyWith({
+    List<MessageModel>? messages,
+    bool? isSending,
+    String? errorMessage,
+    bool clearError = false,
+  }) =>
       ChatLoaded(
         messages: messages ?? this.messages,
         isSending: isSending ?? this.isSending,
+        errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
       );
 
   @override
-  List<Object?> get props => [messages, isSending];
+  List<Object?> get props => [messages, isSending, errorMessage];
 }
 
 class ChatError extends ChatState {

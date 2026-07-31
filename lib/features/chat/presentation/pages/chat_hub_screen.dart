@@ -10,6 +10,8 @@ import '../../../appointments/presentation/bloc/appointment_bloc.dart';
 import '../../../appointments/presentation/bloc/appointment_state.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../therapists/data/models/therapist_model.dart';
+import '../../../therapists/presentation/bloc/therapist_bloc.dart';
 import '../../data/repositories/chat_repository.dart';
 import '../bloc/chat_bloc.dart';
 import 'chat_room_screen.dart';
@@ -36,12 +38,10 @@ class ChatHubScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Only show confirmed or pending appointments — those have an assigned
-          // therapist the user can message.
+          final therapistState = context.watch<TherapistBloc>().state;
           final confirmed = apptState.appointments
-              .where((a) =>
-                  a.status == AppointmentStatus.confirmed ||
-                  a.status == AppointmentStatus.pendingPayment)
+              .where((appointment) =>
+                  appointment.status == AppointmentStatus.confirmed)
               .toList();
 
           if (confirmed.isEmpty) {
@@ -59,18 +59,39 @@ class ChatHubScreen extends StatelessWidget {
             separatorBuilder: (_, __) => const Divider(height: 1, indent: 72),
             itemBuilder: (context, index) {
               final appt = confirmed[index];
-              return _ConversationTile(appointment: appt);
+              return _ConversationTile(
+                appointment: appt,
+                therapist: _findTherapist(
+                  therapistState.therapists,
+                  appt.therapistId,
+                ),
+              );
             },
           );
         },
       ),
     );
   }
+
+  TherapistModel? _findTherapist(
+    List<TherapistModel> therapists,
+    String therapistId,
+  ) {
+    for (final therapist in therapists) {
+      if (therapist.id == therapistId) return therapist;
+    }
+    return null;
+  }
 }
 
 class _ConversationTile extends StatelessWidget {
   final AppointmentModel appointment;
-  const _ConversationTile({required this.appointment});
+  final TherapistModel? therapist;
+
+  const _ConversationTile({
+    required this.appointment,
+    required this.therapist,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -81,51 +102,55 @@ class _ConversationTile extends StatelessWidget {
     };
     if (user == null) return const SizedBox.shrink();
 
-    final chatId = ChatRepository.chatId(user.uid, appointment.therapistId);
-    // Use first char of therapistId as fallback avatar initial.
-    final initial = appointment.therapistId.isNotEmpty
-        ? appointment.therapistId[0].toUpperCase()
+    final professional = therapist;
+    final canOpen = professional != null && professional.providerUid.isNotEmpty;
+    final initial = professional?.name.isNotEmpty == true
+        ? professional!.name[0].toUpperCase()
         : 'T';
 
     return ListTile(
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       leading: CircleAvatar(
         radius: 24,
         backgroundColor: AppColors.primary.withValues(alpha: 0.12),
         child: Text(
           initial,
-          style: AppTextStyles.titleMedium
-              .copyWith(color: AppColors.primary),
+          style: AppTextStyles.titleMedium.copyWith(color: AppColors.primary),
         ),
       ),
       title: Text(
-        'Therapist session',
+        professional?.name ?? 'Therapist unavailable',
         style: AppTextStyles.titleMedium,
       ),
       subtitle: Text(
-        _sessionLabel(appointment),
+        canOpen
+            ? _sessionLabel(appointment)
+            : 'Chat is not available for this session.',
         style: AppTextStyles.bodySmall,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: const Icon(
-        Icons.chevron_right_rounded,
+      trailing: Icon(
+        canOpen ? Icons.chevron_right_rounded : Icons.lock_outline_rounded,
         color: AppColors.textSecondary,
       ),
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => ChatBloc(ChatRepository()),
-            child: ChatRoomScreen(
-              chatId: chatId,
-              currentUserId: user.uid,
-              currentUserAlias: user.alias,
-              therapistName: 'Your Therapist',
-            ),
-          ),
-        ),
-      ),
+      onTap: !canOpen
+          ? null
+          : () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => ChatBloc(ChatRepository()),
+                    child: ChatRoomScreen(
+                      chatId: appointment.id,
+                      currentUserId: user.uid,
+                      currentUserAlias: user.alias,
+                      therapistId: professional.id,
+                      providerUid: professional.providerUid,
+                      therapistName: professional.name,
+                    ),
+                  ),
+                ),
+              ),
     );
   }
 
@@ -133,4 +158,3 @@ class _ConversationTile extends StatelessWidget {
     return '${appt.status.label} · ${appt.sessionType.label}';
   }
 }
-
