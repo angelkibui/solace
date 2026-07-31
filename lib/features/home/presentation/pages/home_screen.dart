@@ -14,11 +14,7 @@ import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
 import '../widgets/quick_action_card.dart';
 
-/// Home tab (Part E). [onNavigateToTab] lets quick actions and "See all"
-/// links switch MainShell's bottom-nav tab without this screen needing to
-/// know anything about Navigator routes — MainShell owns tab index state,
-/// this just asks for a switch (same reasoning as AuthGate owning
-/// Login<->Register instead of the screens navigating themselves).
+// HomeScreen is the main landing page for the app
 class HomeScreen extends StatefulWidget {
   final ValueChanged<int> onNavigateToTab;
 
@@ -54,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: RefreshIndicator(
           onRefresh: () async {
             context.read<HomeBloc>().add(const HomeRefreshRequested());
-            // Give the shimmer/refresh spinner a moment so the pull gesture
-            // (E7) doesn't feel like it did nothing on a fast connection.
+           
             await Future.delayed(const Duration(milliseconds: 700));
           },
           child: ListView(
@@ -82,14 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icons.calendar_today_rounded,
                       label: 'Book a Session',
                       tint: AppColors.iconTints[0],
-                      onTap: () => widget.onNavigateToTab(1), // Therapists tab
+                      onTap: () => widget.onNavigateToTab(1),
                     ),
                     const SizedBox(width: 10),
                     QuickActionCard(
                       icon: Icons.groups_rounded,
                       label: 'Join a Circle',
                       tint: AppColors.iconTints[1],
-                      onTap: () => widget.onNavigateToTab(2), // Circles tab
+                      onTap: () => widget.onNavigateToTab(2), 
                     ),
                     const SizedBox(width: 10),
                     QuickActionCard(
@@ -205,8 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text('Upcoming Sessions', style: AppTextStyles.headingSmall),
               ),
               const SizedBox(height: 12),
-              // No AppointmentRepository yet (Part G) — honest empty state
-              // rather than fabricating a fake appointment.
               EmptyStateWidget(
                 icon: Icons.event_available_outlined,
                 title: 'No upcoming sessions',

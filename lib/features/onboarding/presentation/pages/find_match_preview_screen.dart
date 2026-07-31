@@ -8,10 +8,7 @@ import '../../../../core/widgets/therapist_card.dart';
 import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 
-/// "Find your match" — a preview of what the therapist directory (Part F)
-/// will look like once it's wired to Firestore. The filter pills and
-/// cards here use sample data purely to sell the feature during
-/// onboarding; Part F replaces this with a real, queryable directory.
+
 class FindMatchPreviewScreen extends StatefulWidget {
   const FindMatchPreviewScreen({super.key});
 

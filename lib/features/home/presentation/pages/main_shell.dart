@@ -24,18 +24,6 @@ import '../../../therapists/presentation/pages/therapist_list_screen.dart';
 import '../bloc/home_bloc.dart';
 import 'home_screen.dart';
 
-/// The scaffold AuthGate hands off to once someone is authenticated +
-/// verified. Owns bottom-nav tab state itself (an int index) rather than
-/// using named Navigator routes per tab, matching CustomBottomNavBar's
-/// original "Home, Therapists, Circles, Chat, Profile" design.
-///
-/// TherapistBloc/AppointmentBloc/PaymentBloc used to be provided directly
-/// inside AuthGate, with TherapistListScreen as the *entire* authenticated
-/// experience (no bottom nav) -- that was built in parallel with Home
-/// Dashboard, before the two branches met. They're provided here instead
-/// now, and TherapistListScreen becomes the Therapists tab; the booking ->
-/// checkout and appointments/transactions navigation methods below are
-/// carried over unchanged from that original wiring.
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -56,8 +44,7 @@ class _MainShellState extends State<MainShell> {
       _ => null,
     };
     // MainShell only ever renders while AuthGate is in the AuthAuthenticated
-    // branch, so user is never actually null here -- the null check is
-    // just so this doesn't crash if that assumption ever changes.
+   
     final userId = user?.uid ?? '';
     final userConcerns = user?.preferences ?? const <String>[];
 
