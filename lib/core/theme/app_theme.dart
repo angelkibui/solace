@@ -35,6 +35,7 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           disabledBackgroundColor: AppColors.textDisabled,
+          disabledForegroundColor: Colors.white.withValues(alpha: 0.85),
           minimumSize: const Size.fromHeight(52),
           textStyle: AppTextStyles.button,
           shape:
@@ -44,6 +45,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
+          disabledForegroundColor: AppColors.textSecondary,
           minimumSize: const Size.fromHeight(52),
           textStyle: AppTextStyles.button,
           side: const BorderSide(color: AppColors.primary, width: 1.4),
@@ -128,6 +130,8 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryLight,
           foregroundColor: Colors.white,
+          disabledBackgroundColor: AppColors.darkDivider,
+          disabledForegroundColor: AppColors.darkTextSecondary,
           minimumSize: const Size.fromHeight(52),
           textStyle: AppTextStyles.button,
           shape:
