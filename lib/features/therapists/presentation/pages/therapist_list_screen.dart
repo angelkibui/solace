@@ -16,8 +16,15 @@ import 'therapist_detail_screen.dart';
 
 class TherapistListScreen extends StatelessWidget {
   final ValueChanged<TherapistModel>? onBookTherapist;
+  final VoidCallback? onOpenAppointments;
+  final VoidCallback? onOpenTransactions;
 
-  const TherapistListScreen({super.key, this.onBookTherapist});
+  const TherapistListScreen({
+    super.key,
+    this.onBookTherapist,
+    this.onOpenAppointments,
+    this.onOpenTransactions,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,11 @@ class TherapistListScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _DirectoryHeader(onFilterPressed: () => _showFilters(context)),
+            _DirectoryHeader(
+              onFilterPressed: () => _showFilters(context),
+              onOpenAppointments: onOpenAppointments,
+              onOpenTransactions: onOpenTransactions,
+            ),
             const _QuickFilters(),
             const SizedBox(height: 12),
             Expanded(
@@ -185,8 +196,14 @@ class TherapistListScreen extends StatelessWidget {
 
 class _DirectoryHeader extends StatelessWidget {
   final VoidCallback onFilterPressed;
+  final VoidCallback? onOpenAppointments;
+  final VoidCallback? onOpenTransactions;
 
-  const _DirectoryHeader({required this.onFilterPressed});
+  const _DirectoryHeader({
+    required this.onFilterPressed,
+    this.onOpenAppointments,
+    this.onOpenTransactions,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +232,18 @@ class _DirectoryHeader extends StatelessWidget {
                   ],
                 ),
               ),
+              if (onOpenAppointments != null)
+                IconButton(
+                  tooltip: 'My appointments',
+                  onPressed: onOpenAppointments,
+                  icon: const Icon(Icons.event_note_rounded),
+                ),
+              if (onOpenTransactions != null)
+                IconButton(
+                  tooltip: 'Transaction history',
+                  onPressed: onOpenTransactions,
+                  icon: const Icon(Icons.receipt_long_rounded),
+                ),
               IconButton.filledTonal(
                 tooltip: 'Filter professionals',
                 onPressed: onFilterPressed,
@@ -336,16 +365,70 @@ class _FilterSelection {
   });
 }
 
-class _TherapistFilterSheet extends StatefulWidget {
+class _TherapistFilterSheet extends StatelessWidget {
   final TherapistState initialState;
 
   const _TherapistFilterSheet({required this.initialState});
 
   @override
-  State<_TherapistFilterSheet> createState() => _TherapistFilterSheetState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => _FilterCubit(
+        _FilterSelection(
+          specialty: initialState.specialty,
+          language: initialState.language,
+          gender: initialState.gender,
+          maximumRate: initialState.maximumRate,
+        ),
+      ),
+      child: const _TherapistFilterContent(),
+    );
+  }
 }
 
-class _TherapistFilterSheetState extends State<_TherapistFilterSheet> {
+class _FilterCubit extends Cubit<_FilterSelection> {
+  _FilterCubit(super.initialState);
+
+  void selectSpecialty(String? value) => emit(
+        _FilterSelection(
+          specialty: value,
+          language: state.language,
+          gender: state.gender,
+          maximumRate: state.maximumRate,
+        ),
+      );
+
+  void selectLanguage(String? value) => emit(
+        _FilterSelection(
+          specialty: state.specialty,
+          language: value,
+          gender: state.gender,
+          maximumRate: state.maximumRate,
+        ),
+      );
+
+  void selectGender(String? value) => emit(
+        _FilterSelection(
+          specialty: state.specialty,
+          language: state.language,
+          gender: value,
+          maximumRate: state.maximumRate,
+        ),
+      );
+
+  void selectMaximumRate(int? value) => emit(
+        _FilterSelection(
+          specialty: state.specialty,
+          language: state.language,
+          gender: state.gender,
+          maximumRate: value,
+        ),
+      );
+
+  void reset() => emit(const _FilterSelection());
+}
+
+class _TherapistFilterContent extends StatelessWidget {
   static const specialties = [
     'Anxiety',
     'Trauma',
@@ -356,115 +439,96 @@ class _TherapistFilterSheetState extends State<_TherapistFilterSheet> {
   static const genders = ['Female', 'Male'];
   static const rates = [20000, 35000, 50000, 75000];
 
-  String? specialty;
-  String? language;
-  String? gender;
-  int? maximumRate;
-
-  @override
-  void initState() {
-    super.initState();
-    specialty = widget.initialState.specialty;
-    language = widget.initialState.language;
-    gender = widget.initialState.gender;
-    maximumRate = widget.initialState.maximumRate;
-  }
+  const _TherapistFilterContent();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      padding: EdgeInsets.fromLTRB(
-        24,
-        12,
-        24,
-        24 + MediaQuery.viewInsetsOf(context).bottom,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 44,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.divider,
-                  borderRadius: BorderRadius.circular(99),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text('Refine your match', style: AppTextStyles.headingMedium),
-            const SizedBox(height: 20),
-            _FilterGroup(
-              label: 'Specialty',
-              values: specialties,
-              selected: specialty,
-              onSelected: (value) => setState(() => specialty = value),
-            ),
-            _FilterGroup(
-              label: 'Language',
-              values: languages,
-              selected: language,
-              onSelected: (value) => setState(() => language = value),
-            ),
-            _FilterGroup(
-              label: 'Gender',
-              values: genders,
-              selected: gender,
-              onSelected: (value) => setState(() => gender = value),
-            ),
-            Text('Maximum hourly rate', style: AppTextStyles.titleMedium),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: rates.map((rate) {
-                return ChoiceChip(
-                  selected: maximumRate == rate,
-                  label: Text('${NumberFormat.compact().format(rate)} RWF'),
-                  onSelected: (selected) =>
-                      setState(() => maximumRate = selected ? rate : null),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 28),
-            Row(
+    return BlocBuilder<_FilterCubit, _FilterSelection>(
+      builder: (context, selection) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          ),
+          padding: EdgeInsets.fromLTRB(
+            24,
+            12,
+            24,
+            24 + MediaQuery.viewInsetsOf(context).bottom,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => setState(() {
-                      specialty = null;
-                      language = null;
-                      gender = null;
-                      maximumRate = null;
-                    }),
-                    child: const Text('Reset'),
+                Center(
+                  child: Container(
+                    width: 44,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.divider,
+                      borderRadius: BorderRadius.circular(99),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(
-                      _FilterSelection(
-                        specialty: specialty,
-                        language: language,
-                        gender: gender,
-                        maximumRate: maximumRate,
+                const SizedBox(height: 20),
+                Text('Refine your match', style: AppTextStyles.headingMedium),
+                const SizedBox(height: 20),
+                _FilterGroup(
+                  label: 'Specialty',
+                  values: specialties,
+                  selected: selection.specialty,
+                  onSelected: context.read<_FilterCubit>().selectSpecialty,
+                ),
+                _FilterGroup(
+                  label: 'Language',
+                  values: languages,
+                  selected: selection.language,
+                  onSelected: context.read<_FilterCubit>().selectLanguage,
+                ),
+                _FilterGroup(
+                  label: 'Gender',
+                  values: genders,
+                  selected: selection.gender,
+                  onSelected: context.read<_FilterCubit>().selectGender,
+                ),
+                Text('Maximum hourly rate', style: AppTextStyles.titleMedium),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: rates.map((rate) {
+                    return ChoiceChip(
+                      selected: selection.maximumRate == rate,
+                      label: Text('${NumberFormat.compact().format(rate)} RWF'),
+                      onSelected: (selected) => context
+                          .read<_FilterCubit>()
+                          .selectMaximumRate(selected ? rate : null),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 28),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: context.read<_FilterCubit>().reset,
+                        child: const Text('Reset'),
                       ),
                     ),
-                    child: const Text('Apply filters'),
-                  ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(selection),
+                        child: const Text('Apply filters'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

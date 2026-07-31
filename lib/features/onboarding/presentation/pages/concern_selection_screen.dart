@@ -70,9 +70,9 @@ class ConcernSelectionScreen extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.background,
-                border: const Border(top: BorderSide(color: AppColors.divider)),
+                border: Border(top: BorderSide(color: AppColors.divider)),
               ),
               child: SafeArea(
                 top: false,
