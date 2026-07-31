@@ -16,6 +16,7 @@ class CirclesRequested extends CircleEvent {
   List<Object?> get props => [refresh];
 }
 
+/// I3 — category chip selection. null means "All Circles".
 class CircleCategoryChanged extends CircleEvent {
   final String? category;
 
@@ -25,6 +26,7 @@ class CircleCategoryChanged extends CircleEvent {
   List<Object?> get props => [category];
 }
 
+/// I2/I8 — toggles between the "All Circles" and "My Circles" tabs.
 class CircleTabChanged extends CircleEvent {
   final bool myCirclesOnly;
 
@@ -34,7 +36,10 @@ class CircleTabChanged extends CircleEvent {
   List<Object?> get props => [myCirclesOnly];
 }
 
-
+/// I5 — join if not currently a member, leave if already one. Whether
+/// it's a join or a leave is decided in CircleBloc from the circle's
+/// current memberIds, not passed in here, so callers (the card, the
+/// detail screen) don't need to duplicate that check themselves.
 class CircleJoinToggled extends CircleEvent {
   final String circleId;
 

@@ -38,6 +38,8 @@ class CircleRepository {
       return ResultError(
         ServerFailure(error.message ?? 'Could not load this circle.'),
       );
+    } catch (_) {
+      return const ResultError(UnknownFailure());
     }
   }
 
@@ -49,9 +51,48 @@ class CircleRepository {
       return ResultError(
         ServerFailure(error.message ?? 'Could not create this circle.'),
       );
+    } catch (_) {
+      return const ResultError(UnknownFailure());
     }
   }
 
+  Future<Result<void>> updateCircle(CircleModel circle) async {
+    if (circle.id.isEmpty) {
+      return const ResultError(ServerFailure('Circle ID is required.'));
+    }
+    try {
+      await _collection.doc(circle.id).update(circle.toMap());
+      return const Success(null);
+    } on FirebaseException catch (error) {
+      return ResultError(
+        ServerFailure(error.message ?? 'Could not update this circle.'),
+      );
+    } catch (_) {
+      return const ResultError(UnknownFailure());
+    }
+  }
+
+  Future<Result<void>> deleteCircle(String circleId) async {
+    if (circleId.isEmpty) {
+      return const ResultError(ServerFailure('Circle ID is required.'));
+    }
+    try {
+      await _collection.doc(circleId).delete();
+      return const Success(null);
+    } on FirebaseException catch (error) {
+      return ResultError(
+        ServerFailure(error.message ?? 'Could not delete this circle.'),
+      );
+    } catch (_) {
+      return const ResultError(UnknownFailure());
+    }
+  }
+
+  /// Adds [userId] to memberIds and increments memberCount atomically, in
+  /// one write -- avoids a read-modify-write race if two people join the
+  /// same circle at the same moment. Mirrors what firestore.rules'
+  /// `circles` update rule expects (memberIds/memberCount are the only
+  /// fields this is allowed to touch).
   Future<Result<void>> joinCircle(String circleId, String userId) async {
     try {
       await _collection.doc(circleId).update({
@@ -63,6 +104,8 @@ class CircleRepository {
       return ResultError(
         ServerFailure(error.message ?? 'Could not join this circle.'),
       );
+    } catch (_) {
+      return const ResultError(UnknownFailure());
     }
   }
 
@@ -77,6 +120,8 @@ class CircleRepository {
       return ResultError(
         ServerFailure(error.message ?? 'Could not leave this circle.'),
       );
+    } catch (_) {
+      return const ResultError(UnknownFailure());
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/circle_card.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
@@ -49,8 +48,9 @@ class CirclesListScreen extends StatelessWidget {
                       title: 'We could not load circles',
                       subtitle: state.errorMessage,
                       actionLabel: 'Try again',
-                      onAction: () =>
-                          context.read<CircleBloc>().add(const CirclesRequested()),
+                      onAction: () => context
+                          .read<CircleBloc>()
+                          .add(const CirclesRequested()),
                     );
                   }
 
@@ -66,7 +66,8 @@ class CirclesListScreen extends StatelessWidget {
                       subtitle: state.myCirclesOnly
                           ? 'Browse All Circles and join one that resonates with you.'
                           : 'Try a different category.',
-                      actionLabel: state.myCirclesOnly ? 'Browse All Circles' : null,
+                      actionLabel:
+                          state.myCirclesOnly ? 'Browse All Circles' : null,
                       onAction: state.myCirclesOnly
                           ? () => context
                               .read<CircleBloc>()
@@ -113,14 +114,16 @@ class _CirclesHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Community Circles', style: AppTextStyles.headingLarge),
+          Text(
+            'Community Circles',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
           const SizedBox(height: 6),
           Text(
             'Anonymous, moderated peer support — you\'re never alone in this.',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: AppColors.textSecondary),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
           ),
         ],
       ),
@@ -128,7 +131,11 @@ class _CirclesHeader extends StatelessWidget {
   }
 }
 
-
+/// I2 — "All Circles" / "My Circles" tabs. A plain Row of two ChoiceChip-
+/// styled buttons rather than a Material TabBar, since there's no
+/// TabController/TabBarView pagination need here — CircleBloc's
+/// myCirclesOnly flag already drives which circles show through
+/// visibleCircles, so switching tabs is just one field changing.
 class _TabSelector extends StatelessWidget {
   const _TabSelector();
 
@@ -182,25 +189,27 @@ class _TabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Material(
-      color: selected ? AppColors.primary : AppColors.surface,
+      color: selected ? colors.primary : colors.surfaceContainer,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
+          constraints: const BoxConstraints(minHeight: 48),
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: selected ? Colors.transparent : AppColors.divider,
+              color: selected ? Colors.transparent : colors.outlineVariant,
             ),
           ),
           alignment: Alignment.center,
           child: Text(
             label,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: selected ? Colors.white : AppColors.textPrimary,
+              color: selected ? colors.onPrimary : colors.onSurface,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -210,6 +219,9 @@ class _TabButton extends StatelessWidget {
   }
 }
 
+/// I3 — category chips, populated from whatever categories are actually
+/// present in the loaded circles rather than a hardcoded list, so this
+/// never drifts out of sync with real data the way a fixed list could.
 class _CategoryChips extends StatelessWidget {
   const _CategoryChips();
 
@@ -233,12 +245,14 @@ class _CategoryChips extends StatelessWidget {
             itemBuilder: (context, index) {
               final isAll = index == 0;
               final value = isAll ? null : categories[index - 1];
-              final selected = isAll ? state.category == null : state.category == value;
+              final selected =
+                  isAll ? state.category == null : state.category == value;
               return ChoiceChip(
                 selected: selected,
                 label: Text(isAll ? 'All Categories' : value!),
-                onSelected: (_) =>
-                    context.read<CircleBloc>().add(CircleCategoryChanged(value)),
+                onSelected: (_) => context
+                    .read<CircleBloc>()
+                    .add(CircleCategoryChanged(value)),
               );
             },
           ),
@@ -279,7 +293,8 @@ class _CircleResultCard extends StatelessWidget {
           ),
           onJoinToggle: isPending
               ? null
-              : () => context.read<CircleBloc>().add(CircleJoinToggled(circle.id)),
+              : () =>
+                  context.read<CircleBloc>().add(CircleJoinToggled(circle.id)),
         );
       },
     );

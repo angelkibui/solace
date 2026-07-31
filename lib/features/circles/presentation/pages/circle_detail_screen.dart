@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/widgets/solace_button.dart';
 import '../bloc/circle_bloc.dart';
 import '../bloc/circle_event.dart';
 import '../bloc/circle_state.dart';
 
+/// Reads the circle by [circleId] out of CircleBloc's own state (via
+/// BlocProvider.value from CirclesListScreen) rather than taking a
+/// CircleModel directly, so joining/leaving from this screen reflects
+/// immediately without a separate round-trip or a stale copy passed in.
 class CircleDetailScreen extends StatelessWidget {
   final String circleId;
 
@@ -26,7 +29,8 @@ class CircleDetailScreen extends StatelessWidget {
             final matches = state.circles.where((c) => c.id == circleId);
             final circle = matches.isEmpty ? null : matches.first;
             if (circle == null) {
-              return const Center(child: Text('This circle is no longer available.'));
+              return const Center(
+                  child: Text('This circle is no longer available.'));
             }
 
             final isJoined = circle.isJoinedBy(state.userId);
@@ -47,7 +51,8 @@ class CircleDetailScreen extends StatelessWidget {
                           width: double.infinity,
                           child: circle.imageUrl.isEmpty
                               ? Container(
-                                  color: AppColors.primary.withValues(alpha: 0.12),
+                                  color:
+                                      AppColors.primary.withValues(alpha: 0.12),
                                   child: const Icon(
                                     Icons.groups_rounded,
                                     color: AppColors.primary,
@@ -64,17 +69,27 @@ class CircleDetailScreen extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: Text(circle.name, style: AppTextStyles.headingLarge),
+                            child: Text(
+                              circle.name,
+                              style: Theme.of(context).textTheme.headlineLarge,
+                            ),
                           ),
                           if (circle.isModerated)
                             const Tooltip(
                               message: 'Moderated space',
-                              child: Icon(Icons.verified_user_rounded, color: AppColors.primary),
+                              child: Icon(Icons.verified_user_rounded,
+                                  color: AppColors.primary),
                             ),
                         ],
                       ),
                       const SizedBox(height: 6),
-                      Text(circle.category, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
+                      Text(
+                        circle.category,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
                       const SizedBox(height: 18),
                       _InfoRow(
                         icon: Icons.people_alt_outlined,
@@ -88,9 +103,13 @@ class CircleDetailScreen extends StatelessWidget {
                             : 'Unmoderated peer space',
                       ),
                       const SizedBox(height: 24),
-                      Text('About this circle', style: AppTextStyles.headingSmall),
+                      Text(
+                        'About this circle',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                       const SizedBox(height: 8),
-                      Text(circle.description, style: Theme.of(context).textTheme.bodyLarge),
+                      Text(circle.description,
+                          style: Theme.of(context).textTheme.bodyLarge),
                       const SizedBox(height: 32),
                       SolaceButton(
                         label: isJoined ? 'Enter Circle' : 'Join to Enter',
@@ -98,12 +117,16 @@ class CircleDetailScreen extends StatelessWidget {
                         onPressed: () {
                           if (isJoined) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Circle chat arrives with Part J (Real-Time Chat).'),
+                              SnackBar(
+                                content: Text(
+                                  'Welcome back to ${circle.name}.',
+                                ),
                               ),
                             );
                           } else {
-                            context.read<CircleBloc>().add(CircleJoinToggled(circleId));
+                            context
+                                .read<CircleBloc>()
+                                .add(CircleJoinToggled(circleId));
                           }
                         },
                       ),
@@ -113,8 +136,9 @@ class CircleDetailScreen extends StatelessWidget {
                           label: 'Leave Circle',
                           variant: SolaceButtonVariant.outline,
                           isLoading: isPending,
-                          onPressed: () =>
-                              context.read<CircleBloc>().add(CircleJoinToggled(circleId)),
+                          onPressed: () => context
+                              .read<CircleBloc>()
+                              .add(CircleJoinToggled(circleId)),
                         ),
                       ],
                     ],
@@ -139,9 +163,19 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: AppColors.textSecondary),
+        Icon(
+          icon,
+          size: 18,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: 8),
-        Text(label, style: AppTextStyles.bodyMedium),
+        Expanded(
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

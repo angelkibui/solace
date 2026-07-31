@@ -60,6 +60,7 @@ class CircleBloc extends Bloc<CircleEvent, CircleState> {
     CircleJoinToggled event,
     Emitter<CircleState> emit,
   ) async {
+    if (state.pendingCircleIds.contains(event.circleId)) return;
     final index = state.circles.indexWhere((c) => c.id == event.circleId);
     if (index == -1) return;
     final circle = state.circles[index];
@@ -80,14 +81,26 @@ class CircleBloc extends Bloc<CircleEvent, CircleState> {
 
     switch (result) {
       case Success():
-     
+        final latestIndex =
+            state.circles.indexWhere((item) => item.id == event.circleId);
+        if (latestIndex == -1) {
+          emit(state.copyWith(pendingCircleIds: stillPending));
+          return;
+        }
+        final latestCircle = state.circles[latestIndex];
+        final membershipAlreadyApplied =
+            latestCircle.isJoinedBy(state.userId) != isJoined;
+        if (membershipAlreadyApplied) {
+          emit(state.copyWith(pendingCircleIds: stillPending));
+          return;
+        }
         final updatedMemberIds = isJoined
-            ? (List<String>.from(circle.memberIds)..remove(state.userId))
-            : [...circle.memberIds, state.userId];
+            ? (List<String>.from(latestCircle.memberIds)..remove(state.userId))
+            : [...latestCircle.memberIds, state.userId];
         final updatedCircles = [...state.circles];
-        updatedCircles[index] = circle.copyWith(
+        updatedCircles[latestIndex] = latestCircle.copyWith(
           memberIds: updatedMemberIds,
-          memberCount: circle.memberCount + (isJoined ? -1 : 1),
+          memberCount: latestCircle.memberCount + (isJoined ? -1 : 1),
         );
         emit(
           state.copyWith(

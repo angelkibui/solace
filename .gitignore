@@ -12,7 +12,6 @@ migrate_working_dir/
 node_modules/
 serviceAccountKey.json
 
-
 # IntelliJ
 *.iml
 *.ipr

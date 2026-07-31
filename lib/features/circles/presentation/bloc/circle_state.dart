@@ -12,6 +12,9 @@ class CircleState extends Equatable {
   final bool myCirclesOnly;
   final String? errorMessage;
 
+  /// Circle IDs with a join/leave request in flight, so the card/detail
+  /// screen can show a per-circle spinner instead of blocking the whole
+  /// list while one request is out.
   final Set<String> pendingCircleIds;
 
   const CircleState({
