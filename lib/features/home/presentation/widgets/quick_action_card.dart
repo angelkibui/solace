@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
-/// One of Home's three shortcut cards (E2). Kept local to the Home feature
-/// rather than core/widgets — this specific icon-over-label tile shape is
-/// only used here, unlike TherapistCard/CircleCard which are reused across
-/// several features.
+
 class QuickActionCard extends StatelessWidget {
   final IconData icon;
   final String label;

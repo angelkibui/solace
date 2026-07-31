@@ -3,17 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
-/// Drives Home's "Recommended for you" and "Trending Circles" rows.
-///
-/// There's no TherapistRepository or CircleRepository yet (Parts F and I
-/// are unstarted), so this reads from a small hardcoded list — same
-/// approach Angel used for the onboarding preview screen. What *is* real
-/// here is the personalization logic (E6): recommendations are ranked by
-/// how many of [_userConcerns] (the signed-in user's UserModel.preferences,
-/// captured at registration — see RegisterRequested.preferences) overlap
-/// with each therapist's concern tags. Swap [_mockTherapists] for a
-/// TherapistRepository call whenever Part F lands; the ranking logic below
-/// doesn't need to change.
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final List<String> _userConcerns;
 
@@ -27,9 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onLoad(HomeEvent event, Emitter<HomeState> emit) async {
     emit(const HomeLoading());
     try {
-      // Simulates a network round-trip so LoadingShimmer/RefreshIndicator
-      // have something real to show — replace with an actual Firestore
-      // read once TherapistRepository/CircleRepository exist.
+     
       await Future.delayed(const Duration(milliseconds: 700));
 
       final hasPreferences = _userConcerns.isNotEmpty;
