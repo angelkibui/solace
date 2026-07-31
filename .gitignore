@@ -30,11 +30,6 @@ migrate_working_dir/
 /coverage/
 **/ios/Flutter/.last_build_id
 
-# Firebase (keep config out of git if this repo goes public)
-lib/firebase_options.dart
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
-
 # Android
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
