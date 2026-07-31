@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
 import 'solace_button.dart';
 
 /// Card for a community Circle — used in the Circles list/grid (Part I)
@@ -28,6 +27,7 @@ class CircleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -53,28 +53,34 @@ class CircleCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(title, style: AppTextStyles.titleMedium),
+              Text(title, style: theme.textTheme.titleMedium),
               const SizedBox(height: 4),
               Text(
                 description,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.bodySmall,
+                style: theme.textTheme.bodySmall,
               ),
               const SizedBox(height: 10),
               Row(
                 children: [
-                  const Icon(Icons.people_alt_outlined,
-                      size: 15, color: AppColors.textSecondary),
+                  Icon(
+                    Icons.people_alt_outlined,
+                    size: 15,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 4),
-                  Text('$memberCount members', style: AppTextStyles.caption),
+                  Text(
+                    '$memberCount members',
+                    style: theme.textTheme.labelSmall,
+                  ),
                   const Spacer(),
                   SolaceButton(
                     label: isJoined ? 'Leave' : 'Join',
                     variant: isJoined
                         ? SolaceButtonVariant.outline
                         : SolaceButtonVariant.primary,
-                    height: 32,
+                    height: 48,
                     onPressed: onJoinToggle,
                   ),
                 ],
