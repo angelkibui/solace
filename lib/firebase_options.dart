@@ -53,7 +53,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '402979541096',
     projectId: 'solace-rwanda',
     storageBucket: 'solace-rwanda.firebasestorage.app',
-    iosClientId: '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
+    iosClientId:
+        '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
     iosBundleId: 'com.example.solace',
   );
   static const FirebaseOptions web = FirebaseOptions(
@@ -72,7 +73,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '402979541096',
     projectId: 'solace-rwanda',
     storageBucket: 'solace-rwanda.firebasestorage.app',
-    iosClientId: '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
+    iosClientId:
+        '402979541096-u9ns7v1jt1bk8t1b5cb1tc970m5d0vm7.apps.googleusercontent.com',
     iosBundleId: 'com.example.solace',
   );
 

@@ -8,7 +8,6 @@ import '../../../../core/widgets/therapist_card.dart';
 import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 
-
 class FindMatchPreviewScreen extends StatefulWidget {
   const FindMatchPreviewScreen({super.key});
 

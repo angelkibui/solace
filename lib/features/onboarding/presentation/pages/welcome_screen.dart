@@ -10,7 +10,6 @@ import '../../../auth/presentation/widgets/auth_gate.dart';
 import '../cubit/onboarding_cubit.dart';
 import 'concern_selection_screen.dart';
 
-
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 

@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-
 class UserModel extends Equatable {
   final String uid;
   final String alias;
   final String email;
   final DateTime createdAt;
 
- 
   final List<String> preferences;
 
   final bool onboardingComplete;

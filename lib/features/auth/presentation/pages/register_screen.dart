@@ -57,7 +57,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             alias: _aliasController.text.trim(),
             email: _emailController.text.trim(),
             password: _passwordController.text,
-            preferences: context.read<OnboardingCubit>().state.selectedConcerns.toList(),
+            preferences:
+                context.read<OnboardingCubit>().state.selectedConcerns.toList(),
           ),
         );
   }

@@ -46,7 +46,7 @@ class _MainShellState extends State<MainShell> {
       _ => null,
     };
     // MainShell only ever renders while AuthGate is in the AuthAuthenticated
-   
+
     final userId = user?.uid ?? '';
     final userConcerns = user?.preferences ?? const <String>[];
 
@@ -54,13 +54,16 @@ class _MainShellState extends State<MainShell> {
       providers: [
         BlocProvider(create: (_) => HomeBloc(userConcerns: userConcerns)),
         BlocProvider(
-          create: (_) => TherapistBloc(TherapistRepository())..add(const TherapistsRequested()),
+          create: (_) => TherapistBloc(TherapistRepository())
+            ..add(const TherapistsRequested()),
         ),
         BlocProvider(
-          create: (_) => AppointmentBloc(AppointmentRepository())..add(AppointmentsRequested(userId)),
+          create: (_) => AppointmentBloc(AppointmentRepository())
+            ..add(AppointmentsRequested(userId)),
         ),
         BlocProvider(
-          create: (_) => PaymentBloc(PaymentRepository())..add(TransactionsRequested(userId)),
+          create: (_) => PaymentBloc(PaymentRepository())
+            ..add(TransactionsRequested(userId)),
         ),
       ],
       child: Builder(
@@ -70,7 +73,8 @@ class _MainShellState extends State<MainShell> {
             children: [
               HomeScreen(onNavigateToTab: _goToTab),
               TherapistListScreen(
-                onBookTherapist: (therapist) => _openBooking(context, therapist, userId),
+                onBookTherapist: (therapist) =>
+                    _openBooking(context, therapist, userId),
                 onOpenAppointments: () => _openAppointments(context),
                 onOpenTransactions: () => _openTransactions(context),
               ),
@@ -114,7 +118,8 @@ class _MainShellState extends State<MainShell> {
     );
   }
 
-  void _openBooking(BuildContext context, TherapistModel therapist, String userId) {
+  void _openBooking(
+      BuildContext context, TherapistModel therapist, String userId) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
@@ -122,14 +127,16 @@ class _MainShellState extends State<MainShell> {
           child: BookingFlowScreen(
             userId: userId,
             therapist: therapist,
-            onAppointmentCreated: (appointment) => _openCheckout(context, appointment, therapist),
+            onAppointmentCreated: (appointment) =>
+                _openCheckout(context, appointment, therapist),
           ),
         ),
       ),
     );
   }
 
-  void _openCheckout(BuildContext context, AppointmentModel appointment, TherapistModel therapist) {
+  void _openCheckout(BuildContext context, AppointmentModel appointment,
+      TherapistModel therapist) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
@@ -137,7 +144,8 @@ class _MainShellState extends State<MainShell> {
             BlocProvider.value(value: context.read<AppointmentBloc>()),
             BlocProvider.value(value: context.read<PaymentBloc>()),
           ],
-          child: PaymentCheckoutScreen(appointment: appointment, therapist: therapist),
+          child: PaymentCheckoutScreen(
+              appointment: appointment, therapist: therapist),
         ),
       ),
     );

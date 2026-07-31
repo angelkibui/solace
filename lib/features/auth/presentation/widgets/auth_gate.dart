@@ -42,7 +42,8 @@ class _AuthGateState extends State<AuthGate> {
                   onSwitchToLogin: () => setState(() => _showRegister = false),
                 )
               : LoginScreen(
-                  onSwitchToRegister: () => setState(() => _showRegister = true),
+                  onSwitchToRegister: () =>
+                      setState(() => _showRegister = true),
                 ),
         };
       },

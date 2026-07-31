@@ -16,12 +16,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onLoad(HomeEvent event, Emitter<HomeState> emit) async {
     emit(const HomeLoading());
     try {
-     
       await Future.delayed(const Duration(milliseconds: 700));
 
       final hasPreferences = _userConcerns.isNotEmpty;
-      final ranked = [..._mockTherapists]
-        ..sort((a, b) => _matchScore(b, _userConcerns).compareTo(_matchScore(a, _userConcerns)));
+      final ranked = [..._mockTherapists]..sort((a, b) =>
+          _matchScore(b, _userConcerns)
+              .compareTo(_matchScore(a, _userConcerns)));
 
       emit(HomeLoaded(
         recommendedTherapists: ranked,
@@ -29,7 +29,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         isPersonalized: hasPreferences,
       ));
     } catch (_) {
-      emit(const HomeError('Could not load your recommendations. Pull down to try again.'));
+      emit(const HomeError(
+          'Could not load your recommendations. Pull down to try again.'));
     }
   }
 
@@ -43,7 +44,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       name: 'Dr. Aline Mutoni',
       roleLabel: 'Clinical Psychologist',
       concernTags: ['Anxiety', 'Grief & Loss', 'Family Conflict'],
-      bio: 'Specializing in post-traumatic growth and family dynamics with over 10 years '
+      bio:
+          'Specializing in post-traumatic growth and family dynamics with over 10 years '
           'of experience in Kigali.',
       languages: ['Kinyarwanda', 'English'],
       rate: '35,000 RWF / hr',
@@ -54,7 +56,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       name: 'Jean-Luc Nshimiye',
       roleLabel: 'Licensed Counselor',
       concernTags: ['Work Stress', 'Anxiety'],
-      bio: 'Dedicated to providing a safe, non-judgmental space for individuals '
+      bio:
+          'Dedicated to providing a safe, non-judgmental space for individuals '
           'navigating life\'s transitions and workplace stress.',
       languages: ['English', 'French'],
       rate: '28,000 RWF / hr',
@@ -65,7 +68,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       name: 'Dr. Uwase Keza',
       roleLabel: 'CBT Specialist',
       concernTags: ['Depression', 'Self-Esteem', 'Sleep Issues'],
-      bio: 'Cognitive behavioral therapy focused on breaking cycles of negative thought '
+      bio:
+          'Cognitive behavioral therapy focused on breaking cycles of negative thought '
           'patterns and rebuilding daily routines.',
       languages: ['Kinyarwanda', 'English'],
       rate: '32,000 RWF / hr',
@@ -76,7 +80,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       name: 'Eric Habimana',
       roleLabel: 'Addiction Counselor',
       concernTags: ['Recovery Challenges', 'Family Conflict'],
-      bio: 'Supports clients through recovery from alcohol and substance use with a '
+      bio:
+          'Supports clients through recovery from alcohol and substance use with a '
           'relapse-prevention and peer-support approach.',
       languages: ['Kinyarwanda'],
       rate: '25,000 RWF / hr',
@@ -86,8 +91,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ];
 
   static const _mockCircles = <TrendingCircle>[
-    (title: 'Sobriety Circle', description: 'A moderated space for recovery, one day at a time.', memberCount: 214),
-    (title: 'Anxiety Support', description: 'Share coping strategies with people who understand.', memberCount: 356),
-    (title: 'Young Professionals', description: 'Managing work stress and burnout, together.', memberCount: 189),
+    (
+      title: 'Sobriety Circle',
+      description: 'A moderated space for recovery, one day at a time.',
+      memberCount: 214
+    ),
+    (
+      title: 'Anxiety Support',
+      description: 'Share coping strategies with people who understand.',
+      memberCount: 356
+    ),
+    (
+      title: 'Young Professionals',
+      description: 'Managing work stress and burnout, together.',
+      memberCount: 189
+    ),
   ];
 }

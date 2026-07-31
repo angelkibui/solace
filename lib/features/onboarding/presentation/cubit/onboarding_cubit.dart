@@ -7,7 +7,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   OnboardingCubit(this._prefsService) : super(const OnboardingState());
 
- 
   void setAlias(String alias) {
     emit(state.copyWith(alias: alias));
   }
@@ -22,7 +21,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     emit(state.copyWith(
         selectedConcerns: updated, status: OnboardingStatus.inProgress));
   }
-
 
   Future<bool> hasCompletedOnboarding() =>
       _prefsService.getOnboardingComplete();
