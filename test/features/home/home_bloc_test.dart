@@ -13,7 +13,8 @@ void main() {
       wait: const Duration(milliseconds: 800),
       expect: () => [
         const HomeLoading(),
-        isA<HomeLoaded>().having((s) => s.isPersonalized, 'isPersonalized', false),
+        isA<HomeLoaded>()
+            .having((s) => s.isPersonalized, 'isPersonalized', false),
       ],
     );
 

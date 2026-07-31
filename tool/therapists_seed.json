@@ -12,7 +12,7 @@
     "reviewCount": 48,
     "location": "Kigali, Rwanda",
     "gender": "Female",
-    "providerUid": "",
+    "providerUid": "therapist-aline-mutoni",
     "availability": ["2026-08-03T08:00:00Z", "2026-08-04T12:00:00Z"]
   },
   {
@@ -28,7 +28,7 @@
     "reviewCount": 31,
     "location": "Kigali, Rwanda",
     "gender": "Male",
-    "providerUid": "",
+    "providerUid": "therapist-jean-luc-nshimiye",
     "availability": ["2026-08-03T10:00:00Z", "2026-08-05T13:00:00Z"]
   },
   {
@@ -44,7 +44,7 @@
     "reviewCount": 26,
     "location": "Huye, Rwanda",
     "gender": "Female",
-    "providerUid": "",
+    "providerUid": "therapist-diane-uwase",
     "availability": ["2026-08-04T09:00:00Z", "2026-08-06T14:00:00Z"]
   },
   {
@@ -60,7 +60,7 @@
     "reviewCount": 39,
     "location": "Musanze, Rwanda",
     "gender": "Male",
-    "providerUid": "",
+    "providerUid": "therapist-patrick-habimana",
     "availability": ["2026-08-03T13:00:00Z", "2026-08-07T08:00:00Z"]
   },
   {
@@ -76,7 +76,7 @@
     "reviewCount": 44,
     "location": "Kigali, Rwanda",
     "gender": "Female",
-    "providerUid": "",
+    "providerUid": "therapist-claudine-ineza",
     "availability": ["2026-08-05T08:00:00Z", "2026-08-07T11:00:00Z"]
   },
   {
@@ -92,7 +92,7 @@
     "reviewCount": 19,
     "location": "Rubavu, Rwanda",
     "gender": "Male",
-    "providerUid": "",
+    "providerUid": "therapist-eric-mugisha",
     "availability": ["2026-08-04T15:00:00Z", "2026-08-06T09:00:00Z"]
   }
 ]

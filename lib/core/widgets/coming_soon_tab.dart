@@ -14,7 +14,11 @@ class ComingSoonTab extends StatelessWidget {
   final IconData icon;
   final String partLabel;
 
-  const ComingSoonTab({super.key, required this.title, required this.icon, required this.partLabel});
+  const ComingSoonTab(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.partLabel});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,9 @@ class ComingSoonTab extends StatelessWidget {
             children: [
               Icon(icon, color: AppColors.textSecondary, size: 48),
               const SizedBox(height: 16),
-              Text('$title is on its way', style: AppTextStyles.headingSmall, textAlign: TextAlign.center),
+              Text('$title is on its way',
+                  style: AppTextStyles.headingSmall,
+                  textAlign: TextAlign.center),
               const SizedBox(height: 8),
               Text(
                 'This tab arrives with $partLabel.',

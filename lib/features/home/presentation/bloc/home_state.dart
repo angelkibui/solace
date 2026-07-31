@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
 typedef RecommendedTherapist = ({
   String name,
   String roleLabel,
@@ -11,7 +10,6 @@ typedef RecommendedTherapist = ({
   double rating,
   int reviewCount,
 });
-
 
 typedef TrendingCircle = ({
   String title,
@@ -47,7 +45,8 @@ class HomeLoaded extends HomeState {
   });
 
   @override
-  List<Object?> get props => [recommendedTherapists, trendingCircles, isPersonalized];
+  List<Object?> get props =>
+      [recommendedTherapists, trendingCircles, isPersonalized];
 }
 
 class HomeError extends HomeState {

@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: RefreshIndicator(
           onRefresh: () async {
             context.read<HomeBloc>().add(const HomeRefreshRequested());
-           
+
             await Future.delayed(const Duration(milliseconds: 700));
           },
           child: ListView(
@@ -58,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text('$_greeting, $alias', style: AppTextStyles.headingMedium),
+                child: Text('$_greeting, $alias',
+                    style: AppTextStyles.headingMedium),
               ),
               const SizedBox(height: 4),
               Padding(
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icons.groups_rounded,
                       label: 'Join a Circle',
                       tint: AppColors.iconTints[1],
-                      onTap: () => widget.onNavigateToTab(2), 
+                      onTap: () => widget.onNavigateToTab(2),
                     ),
                     const SizedBox(width: 10),
                     QuickActionCard(
@@ -92,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: 'Take Assessment',
                       tint: AppColors.iconTints[4],
                       onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Assessment feature is planned but not yet built.')),
+                        const SnackBar(
+                            content: Text(
+                                'Assessment feature is planned but not yet built.')),
                       ),
                     ),
                   ],
@@ -102,12 +105,16 @@ class _HomeScreenState extends State<HomeScreen> {
               BlocBuilder<HomeBloc, HomeState>(
                 builder: (context, state) {
                   return switch (state) {
-                    HomeInitial() || HomeLoading() => Column(
+                    HomeInitial() || HomeLoading() => const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _SectionHeader(title: 'Recommended for you', onSeeAll: null),
-                          const SizedBox(height: 12),
-                          const SizedBox(height: 160, child: LoadingShimmer(itemCount: 2, itemHeight: 160)),
+                          _SectionHeader(
+                              title: 'Recommended for you', onSeeAll: null),
+                          SizedBox(height: 12),
+                          SizedBox(
+                              height: 160,
+                              child: LoadingShimmer(
+                                  itemCount: 2, itemHeight: 160)),
                         ],
                       ),
                     HomeError(:final message) => Padding(
@@ -118,7 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           subtitle: message,
                         ),
                       ),
-                    HomeLoaded(:final recommendedTherapists, :final trendingCircles, :final isPersonalized) => Column(
+                    HomeLoaded(
+                      :final recommendedTherapists,
+                      :final trendingCircles,
+                      :final isPersonalized
+                    ) =>
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _SectionHeader(
@@ -140,7 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                for (final (i, t) in recommendedTherapists.indexed) ...[
+                                for (final (i, t)
+                                    in recommendedTherapists.indexed) ...[
                                   SizedBox(
                                     width: 280,
                                     child: TherapistCard(
@@ -156,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onBook: () => widget.onNavigateToTab(1),
                                     ),
                                   ),
-                                  if (i != recommendedTherapists.length - 1) const SizedBox(width: 12),
+                                  if (i != recommendedTherapists.length - 1)
+                                    const SizedBox(width: 12),
                                 ],
                               ],
                             ),
@@ -173,7 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                for (final (i, c) in trendingCircles.indexed) ...[
+                                for (final (i, c)
+                                    in trendingCircles.indexed) ...[
                                   SizedBox(
                                     width: 220,
                                     child: CircleCard(
@@ -181,10 +196,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       description: c.description,
                                       memberCount: c.memberCount,
                                       onTap: () => widget.onNavigateToTab(2),
-                                      onJoinToggle: () => widget.onNavigateToTab(2),
+                                      onJoinToggle: () =>
+                                          widget.onNavigateToTab(2),
                                     ),
                                   ),
-                                  if (i != trendingCircles.length - 1) const SizedBox(width: 12),
+                                  if (i != trendingCircles.length - 1)
+                                    const SizedBox(width: 12),
                                 ],
                               ],
                             ),
@@ -197,13 +214,15 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 28),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Upcoming Sessions', style: AppTextStyles.headingSmall),
+                child: Text('Upcoming Sessions',
+                    style: AppTextStyles.headingSmall),
               ),
               const SizedBox(height: 12),
               EmptyStateWidget(
                 icon: Icons.event_available_outlined,
                 title: 'No upcoming sessions',
-                subtitle: 'Book a consultation with a therapist to see it here.',
+                subtitle:
+                    'Book a consultation with a therapist to see it here.',
                 actionLabel: 'Book a Session',
                 onAction: () => widget.onNavigateToTab(1),
               ),

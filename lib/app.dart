@@ -72,9 +72,12 @@ class _FirebaseUnavailableApp extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.cloud_off_rounded, size: 56, color: AppColors.textSecondary),
+                  const Icon(Icons.cloud_off_rounded,
+                      size: 56, color: AppColors.textSecondary),
                   const SizedBox(height: 20),
-                  Text("Can't connect right now", style: AppTextStyles.headingSmall, textAlign: TextAlign.center),
+                  Text("Can't connect right now",
+                      style: AppTextStyles.headingSmall,
+                      textAlign: TextAlign.center),
                   const SizedBox(height: 8),
                   Text(
                     'Solace needs a working connection to start. Check your internet '

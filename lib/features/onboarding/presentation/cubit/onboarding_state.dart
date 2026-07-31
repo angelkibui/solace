@@ -6,7 +6,6 @@ class OnboardingState extends Equatable {
   final Set<String> selectedConcerns;
   final OnboardingStatus status;
 
-
   final String? alias;
 
   const OnboardingState({

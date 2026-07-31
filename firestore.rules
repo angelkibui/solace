@@ -20,8 +20,32 @@ service cloud.firestore {
           == request.auth.uid;
     }
 
+    function validAlias(alias) {
+      return alias is string && alias.size() >= 3 && alias.size() <= 24;
+    }
+
+    function validPreferences(preferences) {
+      return preferences is list && preferences.size() <= 20;
+    }
+
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId)
+        && request.resource.data.keys().hasOnly([
+          'alias', 'email', 'createdAt', 'preferences', 'onboardingComplete'
+        ])
+        && validAlias(request.resource.data.alias)
+        && request.resource.data.email is string
+        && request.resource.data.createdAt is timestamp
+        && validPreferences(request.resource.data.preferences)
+        && request.resource.data.onboardingComplete is bool;
+      allow update: if isOwner(userId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['alias', 'preferences', 'onboardingComplete'])
+        && validAlias(request.resource.data.alias)
+        && validPreferences(request.resource.data.preferences)
+        && request.resource.data.onboardingComplete is bool;
+      allow delete: if isOwner(userId);
     }
 
     match /therapists/{therapistId} {
@@ -55,6 +79,67 @@ service cloud.firestore {
         && request.resource.data.transactionId == resource.data.transactionId
         && request.resource.data.amount == resource.data.amount;
       allow delete: if isOwner(resource.data.userId);
+    }
+
+    function chatDocument(chatId) {
+      return get(/databases/$(database)/documents/chats/$(chatId));
+    }
+
+    function isChatParticipant(chatId) {
+      return signedIn()
+        && (chatDocument(chatId).data.userId == request.auth.uid
+          || chatDocument(chatId).data.providerUid == request.auth.uid);
+    }
+
+    match /chats/{chatId} {
+      allow get: if isChatParticipant(chatId)
+        || (signedIn()
+          && get(/databases/$(database)/documents/appointments/$(chatId)).data.userId
+            == request.auth.uid);
+      allow list: if isChatParticipant(chatId);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'appointmentId', 'userId', 'therapistId', 'providerUid', 'createdAt'
+        ])
+        && request.resource.data.appointmentId == chatId
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && get(/databases/$(database)/documents/appointments/$(chatId)).data.userId
+          == request.auth.uid
+        && get(/databases/$(database)/documents/appointments/$(chatId)).data.therapistId
+          == request.resource.data.therapistId
+        && get(/databases/$(database)/documents/appointments/$(chatId)).data.status
+          == 'confirmed'
+        && get(/databases/$(database)/documents/therapists/$(request.resource.data.therapistId)).data.providerUid
+          == request.resource.data.providerUid;
+      allow update, delete: if false;
+
+      match /messages/{messageId} {
+        allow read: if isChatParticipant(chatId);
+        allow create: if isChatParticipant(chatId)
+          && request.resource.data.keys().hasOnly([
+            'senderId', 'senderAlias', 'text', 'createdAt', 'isRead'
+          ])
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 2000
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.isRead == false
+          && ((request.auth.uid == chatDocument(chatId).data.userId
+              && request.resource.data.senderAlias
+                == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.alias)
+            || (request.auth.uid == chatDocument(chatId).data.providerUid
+              && request.resource.data.senderAlias
+                == get(/databases/$(database)/documents/therapists/$(chatDocument(chatId).data.therapistId)).data.name));
+        allow update: if isChatParticipant(chatId)
+          && resource.data.senderId != request.auth.uid
+          && resource.data.isRead == false
+          && request.resource.data.isRead == true
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['isRead']);
+        allow delete: if false;
+      }
     }
   }
 }

@@ -21,6 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<PasswordResetRequested>(_onPasswordResetRequested);
     on<EmailVerificationCheckRequested>(_onEmailVerificationCheckRequested);
     on<ResendVerificationEmailRequested>(_onResendVerificationEmailRequested);
+    on<ProfileUpdateRequested>(_onProfileUpdateRequested);
 
     _authStateSubscription = _authRepository.authStateChanges.listen(
       (user) => add(AuthUserChanged(user)),
@@ -118,6 +119,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     await _authRepository.resendVerificationEmail();
+  }
+
+  Future<void> _onProfileUpdateRequested(
+    ProfileUpdateRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final current = state;
+    if (current is! AuthAuthenticated || current.isUpdatingProfile) return;
+
+    emit(current.copyWith(
+      isUpdatingProfile: true,
+      clearProfileError: true,
+    ));
+    final result = await _authRepository.updateProfile(
+      alias: event.alias,
+      preferences: event.preferences,
+    );
+    result.fold(
+      (failure) => emit(current.copyWith(
+        isUpdatingProfile: false,
+        profileErrorMessage: failure.message,
+      )),
+      (user) => emit(current.copyWith(
+        user: user,
+        isUpdatingProfile: false,
+        clearProfileError: true,
+      )),
+    );
   }
 
   @override

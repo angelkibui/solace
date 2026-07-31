@@ -11,18 +11,27 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    if (kDebugMode) debugPrint('[CHANGE] -- ${bloc.runtimeType}\n$change');
+    if (kDebugMode) {
+      debugPrint(
+        '[CHANGE] -- ${bloc.runtimeType}: '
+        '${change.currentState.runtimeType} -> ${change.nextState.runtimeType}',
+      );
+    }
   }
 
   @override
   void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
     super.onEvent(bloc, event);
-    if (kDebugMode) debugPrint('[EVENT] -- ${bloc.runtimeType}, $event');
+    if (kDebugMode) {
+      debugPrint('[EVENT] -- ${bloc.runtimeType}: ${event.runtimeType}');
+    }
   }
 
   @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    if (kDebugMode) debugPrint('[ERROR] -- ${bloc.runtimeType}, $error');
+    if (kDebugMode) {
+      debugPrint('[ERROR] -- ${bloc.runtimeType}: ${error.runtimeType}');
+    }
     super.onError(bloc, error, stackTrace);
   }
 

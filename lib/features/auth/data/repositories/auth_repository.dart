@@ -6,8 +6,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../core/utils/failure.dart';
 import '../../../../core/utils/result.dart';
+import '../../../../core/utils/validators.dart';
 import '../models/user_model.dart';
-
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
@@ -24,7 +24,6 @@ class AuthRepository {
 
   CollectionReference<Map<String, dynamic>> get _usersCollection =>
       _firestore.collection('users');
-
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
@@ -91,7 +90,6 @@ class AuthRepository {
     }
   }
 
-
   Future<Result<UserModel>> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
@@ -123,7 +121,6 @@ class AuthRepository {
     }
   }
 
- 
   Future<Result<void>> resendVerificationEmail() async {
     try {
       final user = _firebaseAuth.currentUser;
@@ -137,7 +134,6 @@ class AuthRepository {
       return ResultError(AuthFailure(_messageForAuthCode(e.code)));
     }
   }
-
 
   Future<bool> checkEmailVerified() async {
     final user = _firebaseAuth.currentUser;
@@ -156,7 +152,6 @@ class AuthRepository {
     }
   }
 
-
   Future<void> logout() async {
     await Future.wait([
       _firebaseAuth.signOut(),
@@ -168,6 +163,48 @@ class AuthRepository {
     final doc = await _usersCollection.doc(uid).get();
     if (!doc.exists || doc.data() == null) return null;
     return UserModel.fromMap(doc.data()!, uid);
+  }
+
+  /// Updates the user's alias and/or preferences in Firestore.
+  Future<Result<UserModel>> updateProfile({
+    required String alias,
+    required List<String> preferences,
+  }) async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) {
+      return const ResultError(
+        AuthFailure('Sign in again before updating your profile.'),
+      );
+    }
+    final normalizedAlias = alias.trim();
+    final aliasError = Validators.alias(normalizedAlias);
+    if (aliasError != null) {
+      return ResultError(AuthFailure(aliasError));
+    }
+    final normalizedPreferences = preferences
+        .map((preference) => preference.trim())
+        .where((preference) => preference.isNotEmpty)
+        .toSet()
+        .take(20)
+        .toList();
+
+    try {
+      await _usersCollection.doc(user.uid).update({
+        'alias': normalizedAlias,
+        'preferences': normalizedPreferences,
+      });
+      final updated = await getUserModel(user.uid);
+      if (updated == null) {
+        return const ResultError(
+            ServerFailure('Could not reload your profile.'));
+      }
+      return Success(updated);
+    } on FirebaseException catch (e) {
+      return ResultError(
+          ServerFailure(e.message ?? 'Could not save your profile.'));
+    } catch (_) {
+      return const ResultError(UnknownFailure());
+    }
   }
 
   Future<UserModel> _fetchOrCreateUserDoc(User user,

@@ -73,3 +73,17 @@ class EmailVerificationCheckRequested extends AuthEvent {
 class ResendVerificationEmailRequested extends AuthEvent {
   const ResendVerificationEmailRequested();
 }
+
+/// Fired by ProfileScreen when the user saves changes to their alias or concerns.
+class ProfileUpdateRequested extends AuthEvent {
+  final String alias;
+  final List<String> preferences;
+
+  const ProfileUpdateRequested({
+    required this.alias,
+    required this.preferences,
+  });
+
+  @override
+  List<Object?> get props => [alias, preferences];
+}
