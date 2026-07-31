@@ -335,13 +335,11 @@ class _AvatarHeader extends StatelessWidget {
         if (isEditing)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
+            child: TextField(
               controller: aliasController,
               textAlign: TextAlign.center,
               style: AppTextStyles.headingMedium,
               maxLength: 24,
-              autovalidateMode: AutovalidateMode.onUnfocus,
-              validator: Validators.alias,
               decoration: const InputDecoration(
                 hintText: 'Your alias',
                 counterText: '',

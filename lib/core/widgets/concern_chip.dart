@@ -20,6 +20,8 @@ class ConcernChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final unselectedColor =
+        isDark ? AppColors.darkTextPrimary : AppColors.textPrimary;
 
     return GestureDetector(
       onTap: onSelected == null ? null : () => onSelected!(!isSelected),
@@ -39,7 +41,8 @@ class ConcernChip extends StatelessWidget {
         child: Text(
           label,
           style: AppTextStyles.bodyMedium.copyWith(
-            color: isSelected ? Colors.white : null,
+            inherit: true,
+            color: isSelected ? Colors.white : unselectedColor,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),
         ),
