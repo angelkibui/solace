@@ -15,7 +15,8 @@ import 'solace_button.dart';
 class PlaceholderScreen extends StatelessWidget {
   final String message;
 
-  const PlaceholderScreen({super.key, this.message = 'Next up: Authentication (Part D).'});
+  const PlaceholderScreen(
+      {super.key, this.message = 'Next up: Authentication (Part D).'});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +27,15 @@ class PlaceholderScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 56),
+              const Icon(Icons.check_circle_rounded,
+                  color: AppColors.success, size: 56),
               const SizedBox(height: 16),
-              Text('You\'re all set!', style: AppTextStyles.headingMedium, textAlign: TextAlign.center),
+              Text('You\'re all set!',
+                  style: AppTextStyles.headingMedium,
+                  textAlign: TextAlign.center),
               const SizedBox(height: 8),
-              Text(message, style: AppTextStyles.bodyMedium, textAlign: TextAlign.center),
+              Text(message,
+                  style: AppTextStyles.bodyMedium, textAlign: TextAlign.center),
               const SizedBox(height: 32),
               SolaceButton(
                 label: 'Reset onboarding (dev)',

@@ -15,7 +15,9 @@ class LoadingShimmer extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer.fromColors(
-      baseColor: isDark ? AppColors.darkCardBackground : AppColors.divider.withValues(alpha: 0.5),
+      baseColor: isDark
+          ? AppColors.darkCardBackground
+          : AppColors.divider.withValues(alpha: 0.5),
       highlightColor: isDark ? AppColors.darkDivider : AppColors.surface,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

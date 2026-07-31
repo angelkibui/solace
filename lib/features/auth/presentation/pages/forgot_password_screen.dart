@@ -34,7 +34,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
-    context.read<AuthBloc>().add(PasswordResetRequested(_emailController.text.trim()));
+    context
+        .read<AuthBloc>()
+        .add(PasswordResetRequested(_emailController.text.trim()));
   }
 
   @override
@@ -47,8 +49,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             if (state is AuthError) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: AppColors.error));
-            } else if (state is AuthUnauthenticated && !_emailSent && _emailController.text.isNotEmpty) {
+                ..showSnackBar(SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: AppColors.error));
+            } else if (state is AuthUnauthenticated &&
+                !_emailSent &&
+                _emailController.text.isNotEmpty) {
               // A successful reset call routes AuthBloc back through
               // AuthUnauthenticated — treat that (while this screen is the
               // one that just fired the request) as "email sent".
@@ -104,9 +110,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.mark_email_read_outlined, color: AppColors.success, size: 56),
+        const Icon(Icons.mark_email_read_outlined,
+            color: AppColors.success, size: 56),
         const SizedBox(height: 16),
-        Text('Check your email', style: AppTextStyles.headingMedium, textAlign: TextAlign.center),
+        Text('Check your email',
+            style: AppTextStyles.headingMedium, textAlign: TextAlign.center),
         const SizedBox(height: 8),
         Text(
           "We've sent a password reset link to ${_emailController.text.trim()}.",

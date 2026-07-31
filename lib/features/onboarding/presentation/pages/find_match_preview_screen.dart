@@ -20,7 +20,12 @@ class FindMatchPreviewScreen extends StatefulWidget {
 }
 
 class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
-  static const _filters = ['All Specialties', 'Kinyarwanda', 'English', 'Price Range'];
+  static const _filters = [
+    'All Specialties',
+    'Kinyarwanda',
+    'English',
+    'Price Range'
+  ];
   int _activeFilter = 0;
 
   static const _previewTherapists = [
@@ -28,7 +33,8 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
       name: 'Dr. Aline Mutoni',
       role: 'Clinical Psychologist',
       traits: ['Trauma Informed', 'CBT Specialist'],
-      bio: 'Specializing in post-traumatic growth and family dynamics with over 10 years '
+      bio:
+          'Specializing in post-traumatic growth and family dynamics with over 10 years '
           'of experience in Kigali.',
       languages: ['Kinyarwanda', 'English'],
       rate: '35,000 RWF / hr',
@@ -37,7 +43,8 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
       name: 'Jean-Luc Nshimiye',
       role: 'Licensed Counselor',
       traits: ['Anxiety', 'Grief Support'],
-      bio: 'Dedicated to providing a safe, non-judgmental space for individuals '
+      bio:
+          'Dedicated to providing a safe, non-judgmental space for individuals '
           'navigating life\'s transitions and workplace stress.',
       languages: ['English', 'French'],
       rate: '28,000 RWF / hr',
@@ -66,7 +73,9 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
           IconButton(
             icon: const Icon(Icons.search_rounded),
             onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Search arrives with the Therapist Directory (Part F).')),
+              const SnackBar(
+                  content: Text(
+                      'Search arrives with the Therapist Directory (Part F).')),
             ),
           ),
         ],
@@ -80,7 +89,8 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Licensed Professionals', style: AppTextStyles.headingLarge),
+                  Text('Licensed Professionals',
+                      style: AppTextStyles.headingLarge),
                   const SizedBox(height: 8),
                   Text(
                     'Find vetted Rwandan therapists specializing in trauma, anxiety, and '
@@ -107,12 +117,15 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
                       decoration: BoxDecoration(
                         color: isActive ? AppColors.navy : AppColors.surface,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: isActive ? AppColors.navy : AppColors.divider),
+                        border: Border.all(
+                            color:
+                                isActive ? AppColors.navy : AppColors.divider),
                       ),
                       child: Text(
                         _filters[index],
                         style: AppTextStyles.bodySmall.copyWith(
-                          color: isActive ? Colors.white : AppColors.textPrimary,
+                          color:
+                              isActive ? Colors.white : AppColors.textPrimary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -137,7 +150,9 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
                     languages: t.languages,
                     rate: t.rate,
                     onBook: () => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Booking opens with Part G (Appointment Booking).')),
+                      const SnackBar(
+                          content: Text(
+                              'Booking opens with Part G (Appointment Booking).')),
                     ),
                   );
                 },
@@ -145,13 +160,14 @@ class _FindMatchPreviewScreenState extends State<FindMatchPreviewScreen> {
             ),
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.background,
-                border: const Border(top: BorderSide(color: AppColors.divider)),
+                border: Border(top: BorderSide(color: AppColors.divider)),
               ),
               child: SafeArea(
                 top: false,
-                child: SolaceButton(label: 'Get Started', onPressed: _handleContinue),
+                child: SolaceButton(
+                    label: 'Get Started', onPressed: _handleContinue),
               ),
             ),
           ],

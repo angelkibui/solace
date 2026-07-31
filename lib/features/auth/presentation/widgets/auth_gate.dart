@@ -16,11 +16,13 @@ import '../../../appointments/data/repositories/appointment_repository.dart';
 import '../../../appointments/presentation/bloc/appointment_bloc.dart';
 import '../../../appointments/presentation/bloc/appointment_event.dart';
 import '../../../appointments/presentation/pages/booking_flow_screen.dart';
+import '../../../appointments/presentation/pages/my_appointments_screen.dart';
 import '../../../therapists/data/models/therapist_model.dart';
 import '../../../payments/data/repositories/payment_repository.dart';
 import '../../../payments/presentation/bloc/payment_bloc.dart';
 import '../../../payments/presentation/bloc/payment_event.dart';
 import '../../../payments/presentation/pages/payment_checkout_screen.dart';
+import '../../../payments/presentation/pages/transaction_history_screen.dart';
 
 class AuthGate extends StatefulWidget {
   final bool startAtRegister;
@@ -82,6 +84,30 @@ class _AuthenticatedExperience extends StatelessWidget {
   Widget build(BuildContext context) {
     return TherapistListScreen(
       onBookTherapist: (therapist) => _openBooking(context, therapist),
+      onOpenAppointments: () => _openAppointments(context),
+      onOpenTransactions: () => _openTransactions(context),
+    );
+  }
+
+  void _openAppointments(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: context.read<AppointmentBloc>(),
+          child: const MyAppointmentsScreen(),
+        ),
+      ),
+    );
+  }
+
+  void _openTransactions(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: context.read<PaymentBloc>(),
+          child: const TransactionHistoryScreen(),
+        ),
+      ),
     );
   }
 

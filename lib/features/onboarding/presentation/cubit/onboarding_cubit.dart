@@ -23,12 +23,14 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     } else {
       updated.add(concern);
     }
-    emit(state.copyWith(selectedConcerns: updated, status: OnboardingStatus.inProgress));
+    emit(state.copyWith(
+        selectedConcerns: updated, status: OnboardingStatus.inProgress));
   }
 
   /// Called once by SplashScreen on app launch to decide whether to show
   /// onboarding again or skip straight to the app.
-  Future<bool> hasCompletedOnboarding() => _prefsService.getOnboardingComplete();
+  Future<bool> hasCompletedOnboarding() =>
+      _prefsService.getOnboardingComplete();
 
   Future<void> completeOnboarding() async {
     await _prefsService.setOnboardingComplete(true);

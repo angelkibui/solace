@@ -67,15 +67,19 @@ class TherapistCard extends StatelessWidget {
                       child: imageUrl == null
                           ? Container(
                               color: AppColors.primary.withValues(alpha: 0.12),
-                              child: const Icon(Icons.person, color: AppColors.primary, size: 28),
+                              child: const Icon(Icons.person,
+                                  color: AppColors.primary, size: 28),
                             )
                           : CachedNetworkImage(
                               imageUrl: imageUrl!,
                               fit: BoxFit.cover,
-                              placeholder: (_, __) => Container(color: AppColors.divider),
+                              placeholder: (_, __) =>
+                                  Container(color: AppColors.divider),
                               errorWidget: (_, __, ___) => Container(
-                                color: AppColors.primary.withValues(alpha: 0.12),
-                                child: const Icon(Icons.person, color: AppColors.primary),
+                                color:
+                                    AppColors.primary.withValues(alpha: 0.12),
+                                child: const Icon(Icons.person,
+                                    color: AppColors.primary),
                               ),
                             ),
                     ),
@@ -101,7 +105,8 @@ class TherapistCard extends StatelessWidget {
                             children: [
                               StarRating(rating: rating!, size: 14),
                               const SizedBox(width: 6),
-                              Text('($reviewCount)', style: AppTextStyles.caption),
+                              Text('($reviewCount)',
+                                  style: AppTextStyles.caption),
                             ],
                           ),
                         ],
@@ -117,7 +122,8 @@ class TherapistCard extends StatelessWidget {
                   runSpacing: 6,
                   children: traits
                       .map((trait) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
                               color: AppColors.background,
                               borderRadius: BorderRadius.circular(8),
@@ -130,7 +136,10 @@ class TherapistCard extends StatelessWidget {
               ],
               if (bio.isNotEmpty) ...[
                 const SizedBox(height: 10),
-                Text(bio, style: AppTextStyles.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
+                Text(bio,
+                    style: AppTextStyles.bodySmall,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis),
               ],
               if (languages.isNotEmpty || rate.isNotEmpty) ...[
                 const SizedBox(height: 12),
@@ -144,14 +153,18 @@ class TherapistCard extends StatelessWidget {
                           children: [
                             Text('Languages', style: AppTextStyles.caption),
                             const SizedBox(height: 2),
-                            Text(languages.join(', '), style: AppTextStyles.bodySmall.copyWith(color: AppColors.textPrimary)),
+                            Text(languages.join(', '),
+                                style: AppTextStyles.bodySmall
+                                    .copyWith(color: AppColors.textPrimary)),
                           ],
                         ),
                       ),
                     if (rate.isNotEmpty)
                       Text(
                         rate,
-                        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700),
                       ),
                   ],
                 ),
@@ -160,7 +173,10 @@ class TherapistCard extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: SolaceButton(label: 'Book Consultation', height: 44, onPressed: onBook),
+                    child: SolaceButton(
+                        label: 'Book Consultation',
+                        height: 44,
+                        onPressed: onBook),
                   ),
                   if (onSecondaryAction != null) ...[
                     const SizedBox(width: 10),
@@ -171,7 +187,8 @@ class TherapistCard extends StatelessWidget {
                         onPressed: onSecondaryAction,
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                         child: Icon(secondaryActionIcon, size: 18),
                       ),

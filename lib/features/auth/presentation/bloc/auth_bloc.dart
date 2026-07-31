@@ -27,7 +27,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onUserChanged(AuthUserChanged event, Emitter<AuthState> emit) async {
+  Future<void> _onUserChanged(
+      AuthUserChanged event, Emitter<AuthState> emit) async {
     final user = event.user;
     if (user == null) {
       emit(const AuthUnauthenticated());
@@ -36,7 +37,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final userModel = await _authRepository.getUserModel(user.uid);
     if (userModel == null) {
-      
       emit(const AuthUnauthenticated());
       return;
     }
@@ -44,16 +44,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthAuthenticated(userModel, emailVerified: user.emailVerified));
   }
 
-  Future<void> _onLoginRequested(LoginRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onLoginRequested(
+      LoginRequested event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
-    final result = await _authRepository.loginWithEmail(email: event.email, password: event.password);
+    final result = await _authRepository.loginWithEmail(
+        email: event.email, password: event.password);
     result.fold(
       (failure) => emit(AuthError(failure.message)),
-      (user) => emit(AuthAuthenticated(user, emailVerified: _authRepository.currentUser?.emailVerified ?? false)),
+      (user) => emit(AuthAuthenticated(user,
+          emailVerified: _authRepository.currentUser?.emailVerified ?? false)),
     );
   }
 
-  Future<void> _onRegisterRequested(RegisterRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onRegisterRequested(
+      RegisterRequested event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
     final result = await _authRepository.registerWithEmail(
       alias: event.alias,
@@ -66,21 +70,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onGoogleSignInRequested(GoogleSignInRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onGoogleSignInRequested(
+      GoogleSignInRequested event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
     final result = await _authRepository.signInWithGoogle();
     result.fold(
       (failure) => emit(AuthError(failure.message)),
-      (user) => emit(AuthAuthenticated(user, emailVerified: _authRepository.currentUser?.emailVerified ?? false)),
+      (user) => emit(AuthAuthenticated(user,
+          emailVerified: _authRepository.currentUser?.emailVerified ?? false)),
     );
   }
 
-  Future<void> _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onLogoutRequested(
+      LogoutRequested event, Emitter<AuthState> emit) async {
     await _authRepository.logout();
-    
   }
 
-  Future<void> _onPasswordResetRequested(PasswordResetRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onPasswordResetRequested(
+      PasswordResetRequested event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
     final result = await _authRepository.sendPasswordResetEmail(event.email);
     result.fold(

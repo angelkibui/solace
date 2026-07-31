@@ -96,5 +96,10 @@ void main() {
     await tester.pump();
     expect(find.text('Pay with MoMo'), findsOneWidget);
     expect(tester.takeException(), isNull, reason: 'Airtel checkout layout');
+
+    tester.view.physicalSize = const Size(844, 390);
+    await tester.pumpAndSettle();
+    expect(find.text('Therapy Checkout'), findsOneWidget);
+    expect(tester.takeException(), isNull, reason: 'landscape checkout layout');
   });
 }

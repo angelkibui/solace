@@ -33,7 +33,8 @@ class UserModel extends Equatable {
       uid: uid,
       alias: map['alias'] as String? ?? 'Anonymous',
       email: map['email'] as String? ?? '',
-      createdAt: rawCreatedAt is Timestamp ? rawCreatedAt.toDate() : DateTime.now(),
+      createdAt:
+          rawCreatedAt is Timestamp ? rawCreatedAt.toDate() : DateTime.now(),
       preferences: List<String>.from(map['preferences'] as List? ?? const []),
       onboardingComplete: map['onboardingComplete'] as bool? ?? false,
     );
@@ -68,5 +69,6 @@ class UserModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [uid, alias, email, createdAt, preferences, onboardingComplete];
+  List<Object?> get props =>
+      [uid, alias, email, createdAt, preferences, onboardingComplete];
 }
