@@ -52,3 +52,32 @@ class MessageModel extends Equatable {
         isRead,
       ];
 }
+class TypingIndicator extends Equatable {
+  final String userId;
+  final String userName;
+  final DateTime timestamp;
+
+  const TypingIndicator({
+    required this.userId,
+    required this.userName,
+    required this.timestamp,
+  });
+
+  factory TypingIndicator.fromDoc(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>? ?? {};
+    return TypingIndicator(
+      userId: data['userId'] ?? '',
+      userName: data['userName'] ?? 'Someone',
+      timestamp: (data['timestamp'] as Timestamp?)?.toDate() ?? DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+    'userId': userId,
+    'userName': userName,
+    'timestamp': Timestamp.fromDate(timestamp),
+  };
+
+  @override
+  List<Object?> get props => [userId, userName, timestamp];
+}
